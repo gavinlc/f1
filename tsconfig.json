@@ -2,11 +2,16 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "eslint.config.js",
-    "prettier.config.js",
-    "vite.config.js"
+    // "eslint.config.js",
+    // "prettier.config.js",
+    // "vite.config.js",
+    // "tailwind.config.js"
   ],
-
+  "exclude": [
+    "node_modules",
+    "dist",
+    "*.config.js"
+  ],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
@@ -31,5 +36,6 @@
     "paths": {
       "@/*": ["./src/*"]
     }
+
   }
 }

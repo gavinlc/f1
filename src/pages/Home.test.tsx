@@ -13,15 +13,15 @@ const renderWithProviders = (ui: React.ReactElement) => {
 }
 
 describe('Home', () => {
-  test('renders welcome message', async () => {
-    await act(async () => {
+  test('renders welcome message', () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
     expect(screen.getByText('Welcome to F1 2024 Browser')).toBeDefined()
   })
 
-  test('renders navigation cards', async () => {
-    await act(async () => {
+  test('renders navigation cards', () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 

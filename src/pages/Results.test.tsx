@@ -5,7 +5,6 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { router } from '../router'
 import { f1Api } from '../services/f1Api'
 import { createTestQueryClient } from '../test/setup'
-import type { Race } from '../types/f1'
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -40,12 +39,12 @@ describe('Results', () => {
   })
 
   test('renders page title', async () => {
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const resultsLink = screen.getByRole('link', { name: 'Results' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(resultsLink)
     })
 
@@ -58,12 +57,12 @@ describe('Results', () => {
       () => new Promise(() => {}),
     )
 
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const resultsLink = screen.getByRole('link', { name: 'Results' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(resultsLink)
     })
 
@@ -164,12 +163,12 @@ describe('Results', () => {
     vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces)
     vi.mocked(f1Api.getSingleRaceResult).mockResolvedValueOnce(mockRaceResults)
 
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const resultsLink = screen.getByRole('link', { name: 'Results' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(resultsLink)
     })
 
@@ -197,12 +196,12 @@ describe('Results', () => {
     vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces)
     vi.mocked(f1Api.getSingleRaceResult).mockResolvedValueOnce(mockRaces)
 
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const resultsLink = screen.getByRole('link', { name: 'Results' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(resultsLink)
     })
 

@@ -50,7 +50,9 @@ export function Results() {
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">2024 F1 Race Results</h1>
-        <p>No race results available yet for the 2024 season.</p>
+        <p className="text-muted-foreground">
+          No race results available yet for the 2024 season.
+        </p>
       </div>
     )
   }
@@ -81,7 +83,7 @@ export function Results() {
                 <TabsTrigger
                   key={race.round}
                   value={race.round}
-                  className="data-[state=active]:bg-red-600 data-[state=active]:text-white"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                 >
                   Round {race.round}
                 </TabsTrigger>
@@ -106,7 +108,7 @@ export function Results() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="text-gray-600">
+                  <div className="text-muted-foreground">
                     <p>
                       <span className="font-medium">Date:</span>{' '}
                       {new Date(race.date).toLocaleDateString()}
@@ -117,47 +119,49 @@ export function Results() {
                     </p>
                   </div>
                   {isLoadingResults ? (
-                    <div>Loading results...</div>
+                    <div className="text-muted-foreground">
+                      Loading results...
+                    </div>
                   ) : (
                     <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                      <table className="min-w-full divide-y divide-border">
+                        <thead className="bg-muted">
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                               Pos
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                               Driver
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                               Team
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                               Time/Gap
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                               Points
                             </th>
                           </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-card divide-y divide-border">
                           {selectedRaceData?.MRData.RaceTable.Races[0]?.Results.map(
                             (result) => (
                               <tr key={result.Driver.driverId}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                                   {result.position}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                                   {result.Driver.givenName}{' '}
                                   {result.Driver.familyName}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                                   {result.Constructor.name}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                                   {result.Time?.time || result.status}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                                   {result.points}
                                 </td>
                               </tr>

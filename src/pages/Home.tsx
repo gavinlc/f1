@@ -28,14 +28,14 @@ export function Home() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Welcome to F1 2024 Browser</h1>
-      <p className="text-gray-600">
+      <p className="text-muted-foreground">
         Explore Formula 1 data from the Ergast API. Browse through circuits,
         drivers, constructors, and race results.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {sections.map((section) => (
           <Link key={section.path} to={section.path}>
-            <Card className="h-full hover:bg-gray-50 transition-colors">
+            <Card className="h-full hover:bg-accent transition-colors">
               <CardHeader>
                 <CardTitle
                   data-testid={`${section.title.toLowerCase()}-card-title`}
@@ -44,7 +44,7 @@ export function Home() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{section.description}</p>
+                <p className="text-muted-foreground">{section.description}</p>
               </CardContent>
             </Card>
           </Link>

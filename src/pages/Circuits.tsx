@@ -1,23 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import { f1Api } from '../services/f1Api';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '../components/ui/card';
+import { useQuery } from '@tanstack/react-query'
+import { f1Api } from '../services/f1Api'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 
 export function Circuits() {
   const { data, isLoading } = useQuery({
     queryKey: ['circuits'],
     queryFn: f1Api.getCircuits,
-  });
+  })
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
-  const circuits = data?.MRData.CircuitTable.Circuits || [];
+  const circuits = data?.MRData.CircuitTable.Circuits || []
 
   return (
     <div className="space-y-6">
@@ -29,7 +24,7 @@ export function Circuits() {
               <CardTitle>{circuit.circuitName}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-1 text-gray-600">
+              <div className="space-y-1 text-muted-foreground">
                 <p>
                   <span className="font-medium">Location:</span>{' '}
                   {circuit.Location.locality}, {circuit.Location.country}
@@ -44,5 +39,5 @@ export function Circuits() {
         ))}
       </div>
     </div>
-  );
+  )
 }

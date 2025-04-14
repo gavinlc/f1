@@ -37,12 +37,12 @@ describe('Drivers', () => {
   })
 
   test('renders page title', async () => {
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(driversLink)
     })
 
@@ -53,12 +53,12 @@ describe('Drivers', () => {
     // Override the default mock to simulate loading
     vi.mocked(f1Api.getDrivers).mockImplementation(() => new Promise(() => {}))
 
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(driversLink)
     })
 
@@ -88,12 +88,12 @@ describe('Drivers', () => {
 
     vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers)
 
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(driversLink)
     })
 
@@ -119,12 +119,12 @@ describe('Drivers', () => {
 
     vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers)
 
-    await act(async () => {
+    act(() => {
       renderWithProviders(<RouterProvider router={router} />)
     })
 
     const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    await act(async () => {
+    act(() => {
       fireEvent.click(driversLink)
     })
 

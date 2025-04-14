@@ -1,23 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import { f1Api } from '../services/f1Api';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '../components/ui/card';
+import { useQuery } from '@tanstack/react-query'
+import { f1Api } from '../services/f1Api'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 
 export function Constructors() {
   const { data, isLoading } = useQuery({
     queryKey: ['constructors', '2024'],
     queryFn: () => f1Api.getConstructors('2024'),
-  });
+  })
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
-  const constructors = data?.MRData.ConstructorTable.Constructors || [];
+  const constructors = data?.MRData.ConstructorTable.Constructors || []
 
   return (
     <div className="space-y-6">
@@ -29,7 +24,7 @@ export function Constructors() {
               <CardTitle>{constructor.name}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-1 text-gray-600">
+              <div className="space-y-1 text-muted-foreground">
                 <p>
                   <span className="font-medium">Nationality:</span>{' '}
                   {constructor.nationality}
@@ -40,5 +35,5 @@ export function Constructors() {
         ))}
       </div>
     </div>
-  );
+  )
 }
