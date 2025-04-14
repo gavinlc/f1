@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { Circuits } from './pages/Circuits';
 import { Drivers } from './pages/Drivers';
 import { Constructors } from './pages/Constructors';
+import { Results } from './pages/Results';
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -33,11 +34,18 @@ const constructorsRoute = createRoute({
   component: Constructors,
 });
 
+const resultsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/results',
+  component: Results,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   circuitsRoute,
   driversRoute,
   constructorsRoute,
+  resultsRoute,
 ]);
 
 export const router = new Router({ routeTree });

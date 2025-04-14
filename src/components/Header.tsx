@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router'
 
 export default function Header() {
   return (
@@ -8,7 +8,7 @@ export default function Header() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <Link to="/" className="text-xl font-bold">
-                F1 Browser
+                F1 2024 Browser
               </Link>
             </div>
             <div className="flex space-x-4">
@@ -30,10 +30,16 @@ export default function Header() {
               >
                 Constructors
               </Link>
+              <Link
+                to="/results"
+                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-red-700"
+              >
+                Results
+              </Link>
             </div>
           </div>
         </div>
       </nav>
     </header>
-  );
+  )
 }

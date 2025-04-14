@@ -54,6 +54,14 @@ export const f1Api = {
 
   getRaceResults: async (
     season: string,
+  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+    // Only fetch basic race information without results
+    const response = await fetch(`${BASE_URL}/${season}/races.json`);
+    return response.json();
+  },
+
+  getSingleRaceResult: async (
+    season: string,
     round: string,
   ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
     const response = await fetch(`${BASE_URL}/${season}/${round}/results.json`);

@@ -1,17 +1,5 @@
 export interface F1ApiResponse {
-  season: string;
-  circuit: string;
-  race: string;
-  constructor: string;
-  driver: string;
-  result: string;
-  sprint: string;
-  qualifying: string;
-  pitstop: string;
-  lap: string;
-  driverstanding: string;
-  constructorstanding: string;
-  status: string;
+  [key: string]: string;
 }
 
 export interface Season {
@@ -21,6 +9,7 @@ export interface Season {
 
 export interface Circuit {
   circuitId: string;
+  url: string;
   circuitName: string;
   Location: {
     locality: string;
@@ -28,17 +17,6 @@ export interface Circuit {
     lat: string;
     long: string;
   };
-  url: string;
-}
-
-export interface Race {
-  season: string;
-  round: string;
-  url: string;
-  raceName: string;
-  Circuit: Circuit;
-  date: string;
-  time: string;
 }
 
 export interface Driver {
@@ -84,4 +62,15 @@ export interface Result {
       speed: string;
     };
   };
+}
+
+export interface Race {
+  season: string;
+  round: string;
+  url: string;
+  raceName: string;
+  Circuit: Circuit;
+  date: string;
+  time: string;
+  Results: Array<Result>;
 }
