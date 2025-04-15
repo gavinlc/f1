@@ -29,6 +29,13 @@ export const f1Api = {
     return response.json();
   },
 
+  getCircuitsForSeason: async (
+    season: string,
+  ): Promise<{ MRData: { CircuitTable: { Circuits: Array<Circuit> } } }> => {
+    const response = await fetch(`${BASE_URL}/${season}/circuits.json`);
+    return response.json();
+  },
+
   getRaces: async (
     season: string,
   ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {

@@ -9,7 +9,7 @@ import { createTestQueryClient } from '../test/setup';
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
   f1Api: {
-    getRaceResults: vi.fn(),
+    getCircuitsForSeason: vi.fn(),
   },
 }));
 
@@ -25,15 +25,17 @@ describe('Circuits', () => {
     vi.clearAllMocks();
 
     // Default mock response for all tests
-    const defaultMockRaces = {
+    const defaultMockCircuits = {
       MRData: {
-        RaceTable: {
-          Races: [],
+        CircuitTable: {
+          Circuits: [],
         },
       },
     };
 
-    vi.mocked(f1Api.getRaceResults).mockResolvedValue(defaultMockRaces);
+    vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValue(
+      defaultMockCircuits,
+    );
   });
 
   test('renders page title', async () => {
@@ -51,7 +53,7 @@ describe('Circuits', () => {
 
   test('renders loading state initially', async () => {
     // Override the default mock to simulate loading
-    vi.mocked(f1Api.getRaceResults).mockImplementation(
+    vi.mocked(f1Api.getCircuitsForSeason).mockImplementation(
       () => new Promise(() => {}),
     );
 
@@ -69,56 +71,38 @@ describe('Circuits', () => {
 
   test('renders circuit list when data is loaded', async () => {
     // Mock the API response
-    const mockRaces = {
+    const mockCircuits = {
       MRData: {
-        RaceTable: {
-          Races: [
+        CircuitTable: {
+          Circuits: [
             {
-              season: '2025',
-              round: '1',
-              raceName: 'Bahrain Grand Prix',
-              date: '2025-03-02',
-              time: '15:00:00Z',
-              url: 'http://example.com/bahrain-gp',
-              Circuit: {
-                circuitId: 'bahrain',
-                circuitName: 'Bahrain International Circuit',
-                url: 'http://example.com/bahrain',
-                Location: {
-                  locality: 'Sakhir',
-                  country: 'Bahrain',
-                  lat: '26.0325',
-                  long: '50.5106',
-                },
+              circuitId: 'bahrain',
+              circuitName: 'Bahrain International Circuit',
+              url: 'http://example.com/bahrain',
+              Location: {
+                locality: 'Sakhir',
+                country: 'Bahrain',
+                lat: '26.0325',
+                long: '50.5106',
               },
-              Results: [], // Empty results for basic race info
             },
             {
-              season: '2025',
-              round: '2',
-              raceName: 'Saudi Arabian Grand Prix',
-              date: '2025-03-09',
-              time: '20:00:00Z',
-              url: 'http://example.com/saudi-gp',
-              Circuit: {
-                circuitId: 'jeddah',
-                circuitName: 'Jeddah Corniche Circuit',
-                url: 'http://example.com/jeddah',
-                Location: {
-                  locality: 'Jeddah',
-                  country: 'Saudi Arabia',
-                  lat: '21.6319',
-                  long: '39.1044',
-                },
+              circuitId: 'jeddah',
+              circuitName: 'Jeddah Corniche Circuit',
+              url: 'http://example.com/jeddah',
+              Location: {
+                locality: 'Jeddah',
+                country: 'Saudi Arabia',
+                lat: '21.6319',
+                long: '39.1044',
               },
-              Results: [], // Empty results for basic race info
             },
           ],
         },
       },
     };
 
-    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces);
+    vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValueOnce(mockCircuits);
 
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
@@ -142,15 +126,15 @@ describe('Circuits', () => {
 
   test('handles empty circuit list', async () => {
     // Mock empty API response
-    const mockRaces = {
+    const mockCircuits = {
       MRData: {
-        RaceTable: {
-          Races: [],
+        CircuitTable: {
+          Circuits: [],
         },
       },
     };
 
-    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces);
+    vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValueOnce(mockCircuits);
 
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);

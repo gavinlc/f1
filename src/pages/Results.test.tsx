@@ -216,6 +216,37 @@ describe('Results', () => {
                   },
                 },
               ],
+              SprintResults: [
+                {
+                  number: '1',
+                  position: '1',
+                  positionText: '1',
+                  points: '8',
+                  Driver: {
+                    driverId: 'max_verstappen',
+                    permanentNumber: '1',
+                    code: 'VER',
+                    url: 'http://example.com/verstappen',
+                    givenName: 'Max',
+                    familyName: 'Verstappen',
+                    dateOfBirth: '1997-09-30',
+                    nationality: 'Dutch',
+                  },
+                  Constructor: {
+                    constructorId: 'red_bull',
+                    url: 'http://example.com/red-bull',
+                    name: 'Red Bull Racing',
+                    nationality: 'Austrian',
+                  },
+                  grid: '1',
+                  laps: '24',
+                  status: 'Finished',
+                  Time: {
+                    millis: '2280000',
+                    time: '38:00.000',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -242,15 +273,15 @@ describe('Results', () => {
     // Check race details
     expect(screen.getByText('Bahrain International Circuit')).toBeDefined();
 
-    // Check toggle is present
-    expect(screen.getByText('Showing Grand Prix Results')).toBeDefined();
-
     // Initially shows Grand Prix results
     expect(screen.getByText('Grand Prix Results')).toBeDefined();
     expect(screen.getByText('Max Verstappen')).toBeDefined();
     expect(screen.getByText('Red Bull Racing')).toBeDefined();
     expect(screen.getByText('1:30:12.000')).toBeDefined();
     expect(screen.getByText('25')).toBeDefined();
+
+    // Check toggle is present
+    expect(await screen.findByText('Showing Grand Prix Results')).toBeDefined();
 
     // Sprint results should not be visible initially
     expect(screen.queryByText('Sprint Race Results')).toBeNull();

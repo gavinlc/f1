@@ -46,7 +46,7 @@ describe('Drivers', () => {
       fireEvent.click(driversLink);
     });
 
-    expect(await screen.findByText('F1 Drivers 2024')).toBeDefined();
+    expect(await screen.findByText('F1 Drivers 2025')).toBeDefined();
   });
 
   test('renders loading state initially', async () => {
@@ -129,7 +129,7 @@ describe('Drivers', () => {
     });
 
     // Wait for loading to finish
-    const title = await screen.findByText('F1 Drivers 2024');
+    const title = await screen.findByText('F1 Drivers 2025');
     expect(title).toBeDefined();
 
     // Verify no drivers are rendered

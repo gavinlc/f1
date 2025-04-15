@@ -8,33 +8,41 @@ describe('f1Api', () => {
 
   test('getApiInfo returns API information', async () => {
     const mockResponse = { version: '1.0.0' };
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValueOnce({
+        json: () => Promise.resolve(mockResponse),
+      }),
+    );
 
     const result = await f1Api.getApiInfo();
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('https://api.jolpi.ca/ergast/?format=json');
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.jolpi.ca/ergast/?format=json',
+    );
   });
 
   test('getSeasons returns seasons data', async () => {
     const mockResponse = {
       MRData: {
         SeasonTable: {
-          Seasons: [
-            { season: '2024', url: 'http://example.com/2024' },
-          ],
+          Seasons: [{ season: '2024', url: 'http://example.com/2024' }],
         },
       },
     };
 
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValueOnce({
+        json: () => Promise.resolve(mockResponse),
+      }),
+    );
 
     const result = await f1Api.getSeasons();
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('https://api.jolpi.ca/ergast/f1/seasons.json');
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.jolpi.ca/ergast/f1/seasons.json',
+    );
   });
 
   test('getCircuits returns circuits data', async () => {
@@ -58,13 +66,18 @@ describe('f1Api', () => {
       },
     };
 
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValueOnce({
+        json: () => Promise.resolve(mockResponse),
+      }),
+    );
 
     const result = await f1Api.getCircuits();
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('https://api.jolpi.ca/ergast/f1/circuits.json');
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.jolpi.ca/ergast/f1/circuits.json?limit=100',
+    );
   });
 
   test('getDrivers returns drivers data for a season', async () => {
@@ -87,13 +100,18 @@ describe('f1Api', () => {
       },
     };
 
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValueOnce({
+        json: () => Promise.resolve(mockResponse),
+      }),
+    );
 
     const result = await f1Api.getDrivers('2024');
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('https://api.jolpi.ca/ergast/f1/2024/drivers.json');
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.jolpi.ca/ergast/f1/2024/drivers.json',
+    );
   });
 
   test('getConstructors returns constructors data for a season', async () => {
@@ -112,13 +130,18 @@ describe('f1Api', () => {
       },
     };
 
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValueOnce({
+        json: () => Promise.resolve(mockResponse),
+      }),
+    );
 
     const result = await f1Api.getConstructors('2024');
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith('https://api.jolpi.ca/ergast/f1/2024/constructors.json');
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.jolpi.ca/ergast/f1/2024/constructors.json',
+    );
   });
 
   test('getRaceResults returns race results for a season', async () => {
@@ -151,12 +174,17 @@ describe('f1Api', () => {
       },
     };
 
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({
-      json: () => Promise.resolve(mockRacesResponse),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValueOnce({
+        json: () => Promise.resolve(mockRacesResponse),
+      }),
+    );
 
     const result = await f1Api.getRaceResults('2024');
     expect(result).toEqual(mockRacesResponse);
-    expect(fetch).toHaveBeenCalledWith('https://api.jolpi.ca/ergast/f1/2024/races.json');
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.jolpi.ca/ergast/f1/2024/races.json',
+    );
   });
-}); 
+});

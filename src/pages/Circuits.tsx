@@ -9,26 +9,19 @@ import {
 } from '../components/ui/card';
 
 export function Circuits() {
-  // Fetch races for the 2025 season
-  const { data: racesData, isLoading: isLoadingRaces } = useQuery({
-    queryKey: ['races', '2025'],
-    queryFn: () => f1Api.getRaceResults('2025'),
+  const { data, isLoading } = useQuery({
+    queryKey: ['circuits', '2025'],
+    queryFn: () => f1Api.getCircuitsForSeason('2025'),
   });
 
-  if (isLoadingRaces) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  // Extract unique circuits from the races
-  const races = racesData?.MRData.RaceTable.Races || [];
-  const uniqueCircuits = Array.from(
-    new Map(
-      races.map((race) => [race.Circuit.circuitId, race.Circuit]),
-    ).values(),
-  );
+  const circuits = data?.MRData.CircuitTable.Circuits || [];
 
   // Sort circuits alphabetically by circuitName
-  const sortedCircuits = [...uniqueCircuits].sort((a, b) =>
+  const sortedCircuits = [...circuits].sort((a, b) =>
     a.circuitName.localeCompare(b.circuitName),
   );
 

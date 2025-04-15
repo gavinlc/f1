@@ -9,7 +9,7 @@ describe('Header', () => {
     await act(async () => {
       render(<RouterProvider router={router} />);
     });
-    expect(screen.getByText('F1 2024 Browser')).toBeDefined();
+    expect(screen.getByText('F1 2025 Browser')).toBeDefined();
   });
 
   test('renders all navigation links', async () => {

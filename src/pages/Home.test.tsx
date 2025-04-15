@@ -18,7 +18,7 @@ describe('Home', () => {
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
     });
-    expect(screen.getByText('Welcome to F1 2024 Browser')).toBeDefined();
+    expect(screen.getByText('Welcome to F1 2025 Browser')).toBeDefined();
   });
 
   test('renders navigation cards', async () => {
@@ -27,25 +27,25 @@ describe('Home', () => {
     });
 
     // Check card titles using test IDs
-    expect(screen.getByTestId('2024 results-card-title')).toHaveTextContent(
-      '2024 Results',
+    expect(screen.getByTestId('2025 results-card-title')).toHaveTextContent(
+      '2025 Results',
     );
-    expect(screen.getByTestId('circuits-card-title')).toHaveTextContent(
-      'Circuits',
+    expect(screen.getByTestId('2025 circuits-card-title')).toHaveTextContent(
+      '2025 Circuits',
     );
-    expect(screen.getByTestId('2024 drivers-card-title')).toHaveTextContent(
-      '2024 Drivers',
+    expect(screen.getByTestId('2025 drivers-card-title')).toHaveTextContent(
+      '2025 Drivers',
     );
     expect(
-      screen.getByTestId('2024 constructors-card-title'),
-    ).toHaveTextContent('2024 Constructors');
+      screen.getByTestId('2025 constructors-card-title'),
+    ).toHaveTextContent('2025 Constructors');
 
     // Check card descriptions
     expect(
-      screen.getByText('View race results and standings for the 2024 season'),
+      screen.getByText('View race results and standings for the 2025 season'),
     ).toBeDefined();
     expect(
-      screen.getByText('Browse all Formula 1 circuits and their details'),
+      screen.getByText('Browse Formula 1 circuits used in the 2025 season'),
     ).toBeDefined();
     expect(
       screen.getByText('View current Formula 1 drivers and their information'),

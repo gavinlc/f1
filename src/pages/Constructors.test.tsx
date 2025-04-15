@@ -44,7 +44,7 @@ describe('Constructors', () => {
     await act(async () => {
       fireEvent.click(constructorsLink);
     });
-    expect(await screen.findByText('F1 Constructors 2024')).toBeDefined();
+    expect(await screen.findByText('F1 Constructors 2025')).toBeDefined();
   });
 
   test('renders loading state initially', async () => {
@@ -119,7 +119,7 @@ describe('Constructors', () => {
     });
 
     // Wait for loading to finish
-    const title = await screen.findByText('F1 Constructors 2024');
+    const title = await screen.findByText('F1 Constructors 2025');
     expect(title).toBeDefined();
 
     // Verify no constructors are rendered
