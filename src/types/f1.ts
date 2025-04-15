@@ -72,5 +72,6 @@ export interface Race {
   Circuit: Circuit;
   date: string;
   time: string;
-  Results: Array<Result>;
+  Results?: Array<Result>;
+  SprintResults?: Array<Result>;
 }
