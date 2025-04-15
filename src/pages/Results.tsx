@@ -158,7 +158,7 @@ export function Results() {
                 <TabsTrigger
                   key={race.round}
                   value={race.round}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200 hover:bg-accent/50 hover:scale-105"
                 >
                   Round {race.round}
                 </TabsTrigger>

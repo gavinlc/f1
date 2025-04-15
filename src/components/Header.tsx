@@ -15,25 +15,25 @@ export function Header() {
             <div className="flex items-center space-x-4">
               <Link
                 to="/circuits"
-                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90"
+                className="px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:bg-primary/90 hover:scale-105"
               >
                 Circuits
               </Link>
               <Link
                 to="/drivers"
-                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90"
+                className="px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:bg-primary/90 hover:scale-105"
               >
                 Drivers
               </Link>
               <Link
                 to="/constructors"
-                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90"
+                className="px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:bg-primary/90 hover:scale-105"
               >
                 Constructors
               </Link>
               <Link
                 to="/results"
-                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90"
+                className="px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:bg-primary/90 hover:scale-105"
               >
                 Results
               </Link>

@@ -40,7 +40,7 @@ export function Home() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {sections.map((section) => (
           <Link key={section.path} to={section.path}>
-            <Card className="h-full hover:bg-accent transition-colors">
+            <Card className="h-full transition-all duration-200 hover:bg-accent hover:scale-[1.02] hover:shadow-md">
               <CardHeader>
                 <CardTitle
                   data-testid={`${section.title.toLowerCase()}-card-title`}

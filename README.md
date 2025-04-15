@@ -152,7 +152,7 @@ npx shadcn@latest add [component-name]
 
 3. **Technical Debt**
    - Add comprehensive test coverage
-   - Implement error boundaries
+   - Implement E2E testing with Cypress or Playwright
    - Add performance monitoring
    - Improve accessibility compliance
 

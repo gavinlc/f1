@@ -6,9 +6,11 @@ import { CircuitDetails } from './pages/CircuitDetails';
 import { Drivers } from './pages/Drivers';
 import { Constructors } from './pages/Constructors';
 import { Results } from './pages/Results';
+import { RouterErrorBoundary } from './components/RouterErrorBoundary';
 
 const rootRoute = createRootRoute({
   component: Layout,
+  errorComponent: RouterErrorBoundary,
 });
 
 const indexRoute = createRoute({
