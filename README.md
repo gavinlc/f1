@@ -18,7 +18,7 @@ A modern web application for exploring Formula 1 data, built with React and the 
 
 - **React 19**: Latest version for optimal performance and features
 - **TypeScript**: For type safety and better developer experience
-- **Vite**: Modern build tool for fast development and optimized production builds
+- **Vite**: Modern build tool for fast development and optimised production builds
 
 ### State Management & Data Fetching
 
@@ -63,8 +63,8 @@ src/
 
 2. **Data Management**
 
-   - Centralized API service layer for F1 data
-   - TanStack Query for efficient data caching and synchronization
+   - Centralised API service layer for F1 data
+   - TanStack Query for efficient data caching and synchronisation
    - Type-safe API responses with TypeScript interfaces
 
 3. **Routing**
@@ -72,11 +72,11 @@ src/
    - Code-based routing for explicit route definitions
    - Type-safe route definitions with TanStack Router
    - Nested layouts for consistent UI structure
-   - Centralized route management in `src/router.tsx`
+   - Centralised route management in `src/router.tsx`
 
 4. **Styling**
    - Tailwind CSS for utility-first styling
-   - CSS variables for theme customization
+   - CSS variables for theme customisation
    - Responsive design patterns
 
 ## Getting Started
@@ -129,26 +129,26 @@ npx shadcn@latest add [component-name]
 2. **Code-Based Routing**
 
    - Pros: Explicit route definitions, better control over route configuration, easier to maintain complex routing logic
-   - Cons: More manual setup compared to file-based routing, requires centralized route management
+   - Cons: More manual setup compared to file-based routing, requires centralised route management
 
 3. **Shadcn UI**
-   - Pros: High-quality components, customizable, accessible
+   - Pros: High-quality components, customisable, accessible
    - Cons: Requires more setup compared to traditional UI libraries
 
 ### Future Improvements
 
-1. **Performance Optimizations**
+1. **Performance Optimisations**
 
    - Implement React Suspense for better loading states
    - Add service worker for offline support
-   - Optimize bundle size with code splitting
+   - Optimise bundle size with code splitting
 
 2. **Feature Additions**
 
    - Real-time race updates
    - Historical data comparison
    - Driver statistics and analytics
-   - User preferences and favorites
+   - User preferences and favourites
 
 3. **Technical Debt**
    - Add comprehensive test coverage

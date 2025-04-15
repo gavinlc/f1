@@ -37,12 +37,12 @@ describe('Circuits', () => {
   });
 
   test('renders page title', async () => {
-    act(() => {
+    await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
     });
 
     const circuitsLink = screen.getByRole('link', { name: 'Circuits' });
-    act(() => {
+    await act(async () => {
       fireEvent.click(circuitsLink);
     });
 
@@ -60,7 +60,7 @@ describe('Circuits', () => {
     });
 
     const circuitsLink = screen.getByRole('link', { name: 'Circuits' });
-    act(() => {
+    await act(async () => {
       fireEvent.click(circuitsLink);
     });
 
@@ -91,12 +91,12 @@ describe('Circuits', () => {
 
     vi.mocked(f1Api.getCircuits).mockResolvedValueOnce(mockCircuits);
 
-    act(() => {
+    await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
     });
 
     const circuitsLink = screen.getByRole('link', { name: 'Circuits' });
-    act(() => {
+    await act(async () => {
       fireEvent.click(circuitsLink);
     });
 
@@ -121,12 +121,12 @@ describe('Circuits', () => {
 
     vi.mocked(f1Api.getCircuits).mockResolvedValueOnce(mockCircuits);
 
-    act(() => {
+    await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
     });
 
     const circuitsLink = screen.getByRole('link', { name: 'Circuits' });
-    act(() => {
+    await act(async () => {
       fireEvent.click(circuitsLink);
     });
 

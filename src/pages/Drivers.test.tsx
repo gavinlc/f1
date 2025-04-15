@@ -1,28 +1,28 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { act, fireEvent, render, screen } from '@testing-library/react'
-import { RouterProvider } from '@tanstack/react-router'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { router } from '../router'
-import { f1Api } from '../services/f1Api'
-import { createTestQueryClient } from '../test/setup'
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { RouterProvider } from '@tanstack/react-router';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { router } from '../router';
+import { f1Api } from '../services/f1Api';
+import { createTestQueryClient } from '../test/setup';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
   f1Api: {
     getDrivers: vi.fn(),
   },
-}))
+}));
 
 const renderWithProviders = (ui: React.ReactElement) => {
-  const testQueryClient = createTestQueryClient()
+  const testQueryClient = createTestQueryClient();
   return render(
     <QueryClientProvider client={testQueryClient}>{ui}</QueryClientProvider>,
-  )
-}
+  );
+};
 
 describe('Drivers', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    vi.clearAllMocks();
 
     // Default mock response for all tests
     const defaultMockDrivers = {
@@ -31,39 +31,39 @@ describe('Drivers', () => {
           Drivers: [],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getDrivers).mockResolvedValue(defaultMockDrivers)
-  })
+    vi.mocked(f1Api.getDrivers).mockResolvedValue(defaultMockDrivers);
+  });
 
   test('renders page title', async () => {
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    act(() => {
-      fireEvent.click(driversLink)
-    })
+    const driversLink = screen.getByRole('link', { name: 'Drivers' });
+    await act(async () => {
+      fireEvent.click(driversLink);
+    });
 
-    expect(await screen.findByText('F1 Drivers 2024')).toBeDefined()
-  })
+    expect(await screen.findByText('F1 Drivers 2024')).toBeDefined();
+  });
 
   test('renders loading state initially', async () => {
     // Override the default mock to simulate loading
-    vi.mocked(f1Api.getDrivers).mockImplementation(() => new Promise(() => {}))
+    vi.mocked(f1Api.getDrivers).mockImplementation(() => new Promise(() => {}));
 
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    act(() => {
-      fireEvent.click(driversLink)
-    })
+    const driversLink = screen.getByRole('link', { name: 'Drivers' });
+    await act(async () => {
+      fireEvent.click(driversLink);
+    });
 
-    expect(await screen.findByText('Loading...')).toBeDefined()
-  })
+    expect(await screen.findByText('Loading...')).toBeDefined();
+  });
 
   test('renders driver list when data is loaded', async () => {
     // Mock the API response
@@ -84,28 +84,28 @@ describe('Drivers', () => {
           ],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers)
+    vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers);
 
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    act(() => {
-      fireEvent.click(driversLink)
-    })
+    const driversLink = screen.getByRole('link', { name: 'Drivers' });
+    await act(async () => {
+      fireEvent.click(driversLink);
+    });
 
     // Wait for driver data to load
-    const driverName = await screen.findByText('Max Verstappen')
-    expect(driverName).toBeDefined()
+    const driverName = await screen.findByText('Max Verstappen');
+    expect(driverName).toBeDefined();
 
     // Check driver details
-    expect(screen.getByText(/Dutch/)).toBeDefined()
-    expect(screen.getByText(/9\/30\/1997/)).toBeDefined()
-    expect(screen.getByText(/VER/)).toBeDefined()
-  })
+    expect(screen.getByText(/Dutch/)).toBeDefined();
+    expect(screen.getByText(/9\/30\/1997/)).toBeDefined();
+    expect(screen.getByText(/VER/)).toBeDefined();
+  });
 
   test('handles empty driver list', async () => {
     // Mock empty API response
@@ -115,24 +115,24 @@ describe('Drivers', () => {
           Drivers: [],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers)
+    vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers);
 
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const driversLink = screen.getByRole('link', { name: 'Drivers' })
-    act(() => {
-      fireEvent.click(driversLink)
-    })
+    const driversLink = screen.getByRole('link', { name: 'Drivers' });
+    await act(async () => {
+      fireEvent.click(driversLink);
+    });
 
     // Wait for loading to finish
-    const title = await screen.findByText('F1 Drivers 2024')
-    expect(title).toBeDefined()
+    const title = await screen.findByText('F1 Drivers 2024');
+    expect(title).toBeDefined();
 
     // Verify no drivers are rendered
-    expect(screen.queryByText(/Verstappen/)).toBeNull()
-  })
-})
+    expect(screen.queryByText(/Verstappen/)).toBeNull();
+  });
+});

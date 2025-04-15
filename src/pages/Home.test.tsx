@@ -1,56 +1,68 @@
-import { describe, expect, test } from 'vitest'
-import { act, render, screen } from '@testing-library/react'
-import { RouterProvider } from '@tanstack/react-router'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { router } from '../router'
-import { createTestQueryClient } from '../test/setup'
+import { describe, expect, test } from 'vitest';
+import { act, render, screen } from '@testing-library/react';
+import { RouterProvider } from '@tanstack/react-router';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { axe } from 'vitest-axe';
+import { router } from '../router';
+import { createTestQueryClient } from '../test/setup';
 
 const renderWithProviders = (ui: React.ReactElement) => {
-  const testQueryClient = createTestQueryClient()
+  const testQueryClient = createTestQueryClient();
   return render(
     <QueryClientProvider client={testQueryClient}>{ui}</QueryClientProvider>,
-  )
-}
+  );
+};
 
 describe('Home', () => {
-  test('renders welcome message', () => {
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
-    expect(screen.getByText('Welcome to F1 2024 Browser')).toBeDefined()
-  })
+  test('renders welcome message', async () => {
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
+    expect(screen.getByText('Welcome to F1 2024 Browser')).toBeDefined();
+  });
 
-  test('renders navigation cards', () => {
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+  test('renders navigation cards', async () => {
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
     // Check card titles using test IDs
     expect(screen.getByTestId('2024 results-card-title')).toHaveTextContent(
       '2024 Results',
-    )
+    );
     expect(screen.getByTestId('circuits-card-title')).toHaveTextContent(
       'Circuits',
-    )
+    );
     expect(screen.getByTestId('2024 drivers-card-title')).toHaveTextContent(
       '2024 Drivers',
-    )
+    );
     expect(
       screen.getByTestId('2024 constructors-card-title'),
-    ).toHaveTextContent('2024 Constructors')
+    ).toHaveTextContent('2024 Constructors');
 
     // Check card descriptions
     expect(
       screen.getByText('View race results and standings for the 2024 season'),
-    ).toBeDefined()
+    ).toBeDefined();
     expect(
       screen.getByText('Browse all Formula 1 circuits and their details'),
-    ).toBeDefined()
+    ).toBeDefined();
     expect(
       screen.getByText('View current Formula 1 drivers and their information'),
-    ).toBeDefined()
+    ).toBeDefined();
     expect(
       screen.getByText('Explore Formula 1 teams and their details'),
-    ).toBeDefined()
-  })
-})
+    ).toBeDefined();
+  });
+
+  test('should have no accessibility violations', async () => {
+    const { container } = renderWithProviders(
+      <RouterProvider router={router} />,
+    );
+    await act(async () => {
+      // Wait for any state updates to complete
+    });
+    const results = await axe(container);
+    expect(results.violations).toHaveLength(0);
+  });
+});

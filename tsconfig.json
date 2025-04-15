@@ -2,10 +2,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    // "eslint.config.js",
-    // "prettier.config.js",
-    // "vite.config.js",
-    // "tailwind.config.js"
+    "eslint.config.js",
+    "prettier.config.js",
+    "vite.config.js",
+    "tailwind.config.js"
   ],
   "exclude": [
     "node_modules",

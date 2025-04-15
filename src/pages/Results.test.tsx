@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { act, fireEvent, render, screen } from '@testing-library/react'
-import { RouterProvider } from '@tanstack/react-router'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { router } from '../router'
-import { f1Api } from '../services/f1Api'
-import { createTestQueryClient } from '../test/setup'
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { RouterProvider } from '@tanstack/react-router';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { router } from '../router';
+import { f1Api } from '../services/f1Api';
+import { createTestQueryClient } from '../test/setup';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -12,18 +12,18 @@ vi.mock('../services/f1Api', () => ({
     getRaceResults: vi.fn(),
     getSingleRaceResult: vi.fn(),
   },
-}))
+}));
 
 const renderWithProviders = (ui: React.ReactElement) => {
-  const testQueryClient = createTestQueryClient()
+  const testQueryClient = createTestQueryClient();
   return render(
     <QueryClientProvider client={testQueryClient}>{ui}</QueryClientProvider>,
-  )
-}
+  );
+};
 
 describe('Results', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    vi.clearAllMocks();
 
     // Default mock response for all tests
     const defaultMockRaces = {
@@ -32,42 +32,42 @@ describe('Results', () => {
           Races: [],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getRaceResults).mockResolvedValue(defaultMockRaces)
-    vi.mocked(f1Api.getSingleRaceResult).mockResolvedValue(defaultMockRaces)
-  })
+    vi.mocked(f1Api.getRaceResults).mockResolvedValue(defaultMockRaces);
+    vi.mocked(f1Api.getSingleRaceResult).mockResolvedValue(defaultMockRaces);
+  });
 
   test('renders page title', async () => {
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const resultsLink = screen.getByRole('link', { name: 'Results' })
-    act(() => {
-      fireEvent.click(resultsLink)
-    })
+    const resultsLink = screen.getByRole('link', { name: 'Results' });
+    await act(async () => {
+      fireEvent.click(resultsLink);
+    });
 
-    expect(await screen.findByText('2024 F1 Race Results')).toBeDefined()
-  })
+    expect(await screen.findByText('2024 F1 Race Results')).toBeDefined();
+  });
 
   test('renders loading state initially', async () => {
     // Override the default mock to simulate loading
     vi.mocked(f1Api.getRaceResults).mockImplementation(
       () => new Promise(() => {}),
-    )
+    );
 
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const resultsLink = screen.getByRole('link', { name: 'Results' })
-    act(() => {
-      fireEvent.click(resultsLink)
-    })
+    const resultsLink = screen.getByRole('link', { name: 'Results' });
+    await act(async () => {
+      fireEvent.click(resultsLink);
+    });
 
-    expect(await screen.findByText('Loading...')).toBeDefined()
-  })
+    expect(await screen.findByText('Loading...')).toBeDefined();
+  });
 
   test('renders race list when data is loaded', async () => {
     // Mock the API response for basic race information
@@ -98,7 +98,7 @@ describe('Results', () => {
           ],
         },
       },
-    }
+    };
 
     // Mock the API response for detailed race results
     const mockRaceResults = {
@@ -158,30 +158,30 @@ describe('Results', () => {
           ],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces)
-    vi.mocked(f1Api.getSingleRaceResult).mockResolvedValueOnce(mockRaceResults)
+    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces);
+    vi.mocked(f1Api.getSingleRaceResult).mockResolvedValueOnce(mockRaceResults);
 
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const resultsLink = screen.getByRole('link', { name: 'Results' })
-    act(() => {
-      fireEvent.click(resultsLink)
-    })
+    const resultsLink = screen.getByRole('link', { name: 'Results' });
+    await act(async () => {
+      fireEvent.click(resultsLink);
+    });
 
     // Wait for race data to load
-    const raceName = await screen.findByText('Bahrain Grand Prix')
-    expect(raceName).toBeDefined()
+    const raceName = await screen.findByText('Bahrain Grand Prix');
+    expect(raceName).toBeDefined();
 
     // Check race details
-    expect(screen.getByText('Bahrain International Circuit')).toBeDefined()
-    expect(screen.getByText('Max Verstappen')).toBeDefined()
-    expect(screen.getByText('Red Bull Racing')).toBeDefined()
-    expect(screen.getByText('1:30:12.000')).toBeDefined()
-  })
+    expect(screen.getByText('Bahrain International Circuit')).toBeDefined();
+    expect(screen.getByText('Max Verstappen')).toBeDefined();
+    expect(screen.getByText('Red Bull Racing')).toBeDefined();
+    expect(screen.getByText('1:30:12.000')).toBeDefined();
+  });
 
   test('handles empty race list', async () => {
     // Mock empty API response
@@ -191,27 +191,27 @@ describe('Results', () => {
           Races: [],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces)
-    vi.mocked(f1Api.getSingleRaceResult).mockResolvedValueOnce(mockRaces)
+    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces);
+    vi.mocked(f1Api.getSingleRaceResult).mockResolvedValueOnce(mockRaces);
 
-    act(() => {
-      renderWithProviders(<RouterProvider router={router} />)
-    })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
 
-    const resultsLink = screen.getByRole('link', { name: 'Results' })
-    act(() => {
-      fireEvent.click(resultsLink)
-    })
+    const resultsLink = screen.getByRole('link', { name: 'Results' });
+    await act(async () => {
+      fireEvent.click(resultsLink);
+    });
 
     // Wait for loading to finish
-    const title = await screen.findByText('2024 F1 Race Results')
-    expect(title).toBeDefined()
+    const title = await screen.findByText('2024 F1 Race Results');
+    expect(title).toBeDefined();
 
     // Verify no races are rendered
     expect(
       screen.getByText('No race results available yet for the 2024 season.'),
-    ).toBeDefined()
-  })
-})
+    ).toBeDefined();
+  });
+});

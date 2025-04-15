@@ -1,18 +1,19 @@
 import { describe, expect, test } from 'vitest';
 import { act, render, screen } from '@testing-library/react';
 import { RouterProvider } from '@tanstack/react-router';
+import { axe } from 'vitest-axe';
 import { router } from '../router';
 
 describe('Header', () => {
-  test('renders header with title', () => {
-    act(() => {
+  test('renders header with title', async () => {
+    await act(async () => {
       render(<RouterProvider router={router} />);
     });
     expect(screen.getByText('F1 2024 Browser')).toBeDefined();
   });
 
-  test('renders all navigation links', () => {
-    act(() => {
+  test('renders all navigation links', async () => {
+    await act(async () => {
       render(<RouterProvider router={router} />);
     });
 
@@ -22,8 +23,8 @@ describe('Header', () => {
     });
   });
 
-  test('navigation links have correct hrefs', () => {
-    act(() => {
+  test('navigation links have correct hrefs', async () => {
+    await act(async () => {
       render(<RouterProvider router={router} />);
     });
 
@@ -38,5 +39,14 @@ describe('Header', () => {
       const link = screen.getByRole('link', { name: text });
       expect(link.getAttribute('href')).toBe(href);
     });
+  });
+
+  test('should have no accessibility violations', async () => {
+    const { container } = render(<RouterProvider router={router} />);
+    await act(async () => {
+      // Wait for any state updates to complete
+    });
+    const results = await axe(container);
+    expect(results.violations).toHaveLength(0);
   });
 });

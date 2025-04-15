@@ -1,28 +1,28 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
-import { RouterProvider } from '@tanstack/react-router'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { router } from '../router'
-import { f1Api } from '../services/f1Api'
-import { createTestQueryClient } from '../test/setup'
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { RouterProvider } from '@tanstack/react-router';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { router } from '../router';
+import { f1Api } from '../services/f1Api';
+import { createTestQueryClient } from '../test/setup';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
   f1Api: {
     getConstructors: vi.fn(),
   },
-}))
+}));
 
 const renderWithProviders = (ui: React.ReactElement) => {
-  const testQueryClient = createTestQueryClient()
+  const testQueryClient = createTestQueryClient();
   return render(
     <QueryClientProvider client={testQueryClient}>{ui}</QueryClientProvider>,
-  )
-}
+  );
+};
 
 describe('Constructors', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    vi.clearAllMocks();
 
     // Default mock response for all tests
     const defaultMockConstructors = {
@@ -31,29 +31,37 @@ describe('Constructors', () => {
           Constructors: [],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getConstructors).mockResolvedValue(defaultMockConstructors)
-  })
+    vi.mocked(f1Api.getConstructors).mockResolvedValue(defaultMockConstructors);
+  });
 
   test('renders page title', async () => {
-    renderWithProviders(<RouterProvider router={router} />)
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' })
-    fireEvent.click(constructorsLink)
-    expect(await screen.findByText('F1 Constructors 2024')).toBeDefined()
-  })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
+    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
+    await act(async () => {
+      fireEvent.click(constructorsLink);
+    });
+    expect(await screen.findByText('F1 Constructors 2024')).toBeDefined();
+  });
 
   test('renders loading state initially', async () => {
     // Override the default mock to simulate loading
     vi.mocked(f1Api.getConstructors).mockImplementation(
       () => new Promise(() => {}),
-    )
+    );
 
-    renderWithProviders(<RouterProvider router={router} />)
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' })
-    fireEvent.click(constructorsLink)
-    expect(await screen.findByText('Loading...')).toBeDefined()
-  })
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
+    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
+    await act(async () => {
+      fireEvent.click(constructorsLink);
+    });
+    expect(await screen.findByText('Loading...')).toBeDefined();
+  });
 
   test('renders constructor list when data is loaded', async () => {
     // Mock the API response
@@ -70,21 +78,25 @@ describe('Constructors', () => {
           ],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getConstructors).mockResolvedValueOnce(mockConstructors)
+    vi.mocked(f1Api.getConstructors).mockResolvedValueOnce(mockConstructors);
 
-    renderWithProviders(<RouterProvider router={router} />)
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' })
-    fireEvent.click(constructorsLink)
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
+    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
+    await act(async () => {
+      fireEvent.click(constructorsLink);
+    });
 
     // Wait for constructor data to load
-    const constructorName = await screen.findByText('Red Bull Racing')
-    expect(constructorName).toBeDefined()
+    const constructorName = await screen.findByText('Red Bull Racing');
+    expect(constructorName).toBeDefined();
 
     // Check constructor details
-    expect(screen.getByText(/Austrian/)).toBeDefined()
-  })
+    expect(screen.getByText(/Austrian/)).toBeDefined();
+  });
 
   test('handles empty constructor list', async () => {
     // Mock empty API response
@@ -94,19 +106,23 @@ describe('Constructors', () => {
           Constructors: [],
         },
       },
-    }
+    };
 
-    vi.mocked(f1Api.getConstructors).mockResolvedValueOnce(mockConstructors)
+    vi.mocked(f1Api.getConstructors).mockResolvedValueOnce(mockConstructors);
 
-    renderWithProviders(<RouterProvider router={router} />)
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' })
-    fireEvent.click(constructorsLink)
+    await act(async () => {
+      renderWithProviders(<RouterProvider router={router} />);
+    });
+    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
+    await act(async () => {
+      fireEvent.click(constructorsLink);
+    });
 
     // Wait for loading to finish
-    const title = await screen.findByText('F1 Constructors 2024')
-    expect(title).toBeDefined()
+    const title = await screen.findByText('F1 Constructors 2024');
+    expect(title).toBeDefined();
 
     // Verify no constructors are rendered
-    expect(screen.queryByText(/Red Bull Racing/)).toBeNull()
-  })
-})
+    expect(screen.queryByText(/Red Bull Racing/)).toBeNull();
+  });
+});
