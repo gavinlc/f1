@@ -9,7 +9,7 @@ import { createTestQueryClient } from '../test/setup';
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
   f1Api: {
-    getCircuits: vi.fn(),
+    getRaceResults: vi.fn(),
   },
 }));
 
@@ -25,15 +25,15 @@ describe('Circuits', () => {
     vi.clearAllMocks();
 
     // Default mock response for all tests
-    const defaultMockCircuits = {
+    const defaultMockRaces = {
       MRData: {
-        CircuitTable: {
-          Circuits: [],
+        RaceTable: {
+          Races: [],
         },
       },
     };
 
-    vi.mocked(f1Api.getCircuits).mockResolvedValue(defaultMockCircuits);
+    vi.mocked(f1Api.getRaceResults).mockResolvedValue(defaultMockRaces);
   });
 
   test('renders page title', async () => {
@@ -46,12 +46,12 @@ describe('Circuits', () => {
       fireEvent.click(circuitsLink);
     });
 
-    expect(await screen.findByText('F1 Circuits')).toBeDefined();
+    expect(await screen.findByText('F1 Circuits 2025')).toBeDefined();
   });
 
   test('renders loading state initially', async () => {
     // Override the default mock to simulate loading
-    vi.mocked(f1Api.getCircuits).mockImplementation(
+    vi.mocked(f1Api.getRaceResults).mockImplementation(
       () => new Promise(() => {}),
     );
 
@@ -69,27 +69,56 @@ describe('Circuits', () => {
 
   test('renders circuit list when data is loaded', async () => {
     // Mock the API response
-    const mockCircuits = {
+    const mockRaces = {
       MRData: {
-        CircuitTable: {
-          Circuits: [
+        RaceTable: {
+          Races: [
             {
-              circuitId: 'albert_park',
-              circuitName: 'Albert Park Circuit',
-              url: 'http://example.com/albert_park',
-              Location: {
-                locality: 'Melbourne',
-                country: 'Australia',
-                lat: '-37.8497',
-                long: '144.9687',
+              season: '2025',
+              round: '1',
+              raceName: 'Bahrain Grand Prix',
+              date: '2025-03-02',
+              time: '15:00:00Z',
+              url: 'http://example.com/bahrain-gp',
+              Circuit: {
+                circuitId: 'bahrain',
+                circuitName: 'Bahrain International Circuit',
+                url: 'http://example.com/bahrain',
+                Location: {
+                  locality: 'Sakhir',
+                  country: 'Bahrain',
+                  lat: '26.0325',
+                  long: '50.5106',
+                },
               },
+              Results: [], // Empty results for basic race info
+            },
+            {
+              season: '2025',
+              round: '2',
+              raceName: 'Saudi Arabian Grand Prix',
+              date: '2025-03-09',
+              time: '20:00:00Z',
+              url: 'http://example.com/saudi-gp',
+              Circuit: {
+                circuitId: 'jeddah',
+                circuitName: 'Jeddah Corniche Circuit',
+                url: 'http://example.com/jeddah',
+                Location: {
+                  locality: 'Jeddah',
+                  country: 'Saudi Arabia',
+                  lat: '21.6319',
+                  long: '39.1044',
+                },
+              },
+              Results: [], // Empty results for basic race info
             },
           ],
         },
       },
     };
 
-    vi.mocked(f1Api.getCircuits).mockResolvedValueOnce(mockCircuits);
+    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces);
 
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
@@ -101,25 +130,27 @@ describe('Circuits', () => {
     });
 
     // Wait for circuit data to load
-    const circuitName = await screen.findByText('Albert Park Circuit');
+    const circuitName = await screen.findByText(
+      'Bahrain International Circuit',
+    );
     expect(circuitName).toBeDefined();
 
     // Check location details
-    expect(screen.getByText('Melbourne, Australia')).toBeDefined();
-    expect(screen.getByText('-37.8497, 144.9687')).toBeDefined();
+    expect(screen.getByText('Sakhir, Bahrain')).toBeDefined();
+    expect(screen.getByText('Jeddah, Saudi Arabia')).toBeDefined();
   });
 
   test('handles empty circuit list', async () => {
     // Mock empty API response
-    const mockCircuits = {
+    const mockRaces = {
       MRData: {
-        CircuitTable: {
-          Circuits: [],
+        RaceTable: {
+          Races: [],
         },
       },
     };
 
-    vi.mocked(f1Api.getCircuits).mockResolvedValueOnce(mockCircuits);
+    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces);
 
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
@@ -131,7 +162,7 @@ describe('Circuits', () => {
     });
 
     // Wait for loading to finish
-    const title = await screen.findByText('F1 Circuits');
+    const title = await screen.findByText('F1 Circuits 2025');
     expect(title).toBeDefined();
 
     // Verify no circuits are rendered

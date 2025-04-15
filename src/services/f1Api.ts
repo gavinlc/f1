@@ -25,7 +25,7 @@ export const f1Api = {
   getCircuits: async (): Promise<{
     MRData: { CircuitTable: { Circuits: Array<Circuit> } };
   }> => {
-    const response = await fetch(`${BASE_URL}/circuits.json`);
+    const response = await fetch(`${BASE_URL}/circuits.json?limit=100`);
     return response.json();
   },
 
@@ -65,6 +65,13 @@ export const f1Api = {
     round: string,
   ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
     const response = await fetch(`${BASE_URL}/${season}/${round}/results.json`);
+    return response.json();
+  },
+
+  getCircuit: async (
+    circuitId: string,
+  ): Promise<{ MRData: { CircuitTable: { Circuits: Array<Circuit> } } }> => {
+    const response = await fetch(`${BASE_URL}/circuits/${circuitId}.json`);
     return response.json();
   },
 };

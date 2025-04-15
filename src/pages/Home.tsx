@@ -1,33 +1,38 @@
-import { Link } from '@tanstack/react-router'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
+import { Link } from '@tanstack/react-router';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card';
 
 export function Home() {
   const sections = [
     {
-      title: '2024 Results',
-      description: 'View race results and standings for the 2024 season',
+      title: '2025 Results',
+      description: 'View race results and standings for the 2025 season',
       path: '/results',
     },
     {
-      title: 'Circuits',
-      description: 'Browse all Formula 1 circuits and their details',
+      title: '2025 Circuits',
+      description: 'Browse Formula 1 circuits used in the 2025 season',
       path: '/circuits',
     },
     {
-      title: '2024 Drivers',
+      title: '2025 Drivers',
       description: 'View current Formula 1 drivers and their information',
       path: '/drivers',
     },
     {
-      title: '2024 Constructors',
+      title: '2025 Constructors',
       description: 'Explore Formula 1 teams and their details',
       path: '/constructors',
     },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Welcome to F1 2024 Browser</h1>
+      <h1 className="text-3xl font-bold">Welcome to F1 2025 Browser</h1>
       <p className="text-muted-foreground">
         Explore Formula 1 data from the Ergast API. Browse through circuits,
         drivers, constructors, and race results.
@@ -51,5 +56,5 @@ export function Home() {
         ))}
       </div>
     </div>
-  )
+  );
 }

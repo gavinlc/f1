@@ -1,65 +1,75 @@
-import { useRef, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { f1Api } from '../services/f1Api'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
-import { Button } from '../components/ui/button'
+import { useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { f1Api } from '../services/f1Api';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '../components/ui/tabs';
+import { Button } from '../components/ui/button';
 
 export function Results() {
-  const [selectedRound, setSelectedRound] = useState<string>('1')
-  const tabsListRef = useRef<HTMLDivElement>(null)
+  const [selectedRound, setSelectedRound] = useState<string>('1');
+  const tabsListRef = useRef<HTMLDivElement>(null);
 
   // Query for basic race information
   const { data: racesData, isLoading: isLoadingRaces } = useQuery({
-    queryKey: ['races', '2024'],
-    queryFn: () => f1Api.getRaceResults('2024'),
-  })
+    queryKey: ['races', '2025'],
+    queryFn: () => f1Api.getRaceResults('2025'),
+  });
 
   // Query for selected race results
   const { data: selectedRaceData, isLoading: isLoadingResults } = useQuery({
-    queryKey: ['race-results', '2024', selectedRound],
-    queryFn: () => f1Api.getSingleRaceResult('2024', selectedRound),
+    queryKey: ['race-results', '2025', selectedRound],
+    queryFn: () => f1Api.getSingleRaceResult('2025', selectedRound),
     enabled: !!selectedRound,
-  })
+  });
 
   const scrollTabs = (direction: 'left' | 'right') => {
     if (tabsListRef.current) {
-      const scrollAmount = 200 // Adjust this value as needed
-      const currentScroll = tabsListRef.current.scrollLeft
+      const scrollAmount = 200; // Adjust this value as needed
+      const currentScroll = tabsListRef.current.scrollLeft;
       const newScroll =
         direction === 'left'
           ? currentScroll - scrollAmount
-          : currentScroll + scrollAmount
+          : currentScroll + scrollAmount;
 
       tabsListRef.current.scrollTo({
         left: newScroll,
         behavior: 'smooth',
-      })
+      });
     }
-  }
+  };
 
   if (isLoadingRaces) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
-  const races = racesData?.MRData.RaceTable.Races || []
+  const races = racesData?.MRData.RaceTable.Races || [];
 
   // If no races are available, show a message
   if (races.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">2024 F1 Race Results</h1>
+        <h1 className="text-3xl font-bold">2025 F1 Race Results</h1>
         <p className="text-muted-foreground">
-          No race results available yet for the 2024 season.
+          No race results available yet for the 2025 season.
         </p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">2024 F1 Race Results</h1>
+      <h1 className="text-3xl font-bold">2025 F1 Race Results</h1>
       <Tabs
         defaultValue={selectedRound}
         onValueChange={setSelectedRound}
@@ -178,5 +188,5 @@ export function Results() {
         ))}
       </Tabs>
     </div>
-  )
+  );
 }

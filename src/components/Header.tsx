@@ -1,5 +1,5 @@
-import { Link } from '@tanstack/react-router'
-import { ThemeToggle } from './ThemeToggle'
+import { Link } from '@tanstack/react-router';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Header() {
   return (
@@ -9,7 +9,7 @@ export default function Header() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <Link to="/" className="text-xl font-bold">
-                F1 2024 Browser
+                F1 2025 Browser
               </Link>
             </div>
             <div className="flex items-center space-x-4">
@@ -43,5 +43,5 @@ export default function Header() {
         </div>
       </nav>
     </header>
-  )
+  );
 }

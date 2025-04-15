@@ -1,22 +1,27 @@
-import { useQuery } from '@tanstack/react-query'
-import { f1Api } from '../services/f1Api'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
+import { useQuery } from '@tanstack/react-query';
+import { f1Api } from '../services/f1Api';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card';
 
 export function Drivers() {
   const { data, isLoading } = useQuery({
-    queryKey: ['drivers', '2024'],
-    queryFn: () => f1Api.getDrivers('2024'),
-  })
+    queryKey: ['drivers', '2025'],
+    queryFn: () => f1Api.getDrivers('2025'),
+  });
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
-  const drivers = data?.MRData.DriverTable.Drivers || []
+  const drivers = data?.MRData.DriverTable.Drivers || [];
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">F1 Drivers 2024</h1>
+      <h1 className="text-3xl font-bold">F1 Drivers 2025</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {drivers.map((driver) => (
           <Card key={driver.driverId}>
@@ -49,5 +54,5 @@ export function Drivers() {
         ))}
       </div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-# F1 2024 Browser
+# F1 2025 Browser
 
-A modern web application for exploring Formula 1 data, built with React and the TanStack ecosystem. This application provides a comprehensive interface for browsing F1 circuits, drivers, constructors, and race results for the 2024 season.
+A modern web application for exploring Formula 1 data, built with React and the TanStack ecosystem. This application provides a comprehensive interface for browsing F1 circuits, drivers, constructors, and race results for the 2025 season.
 
 ## Features
 
@@ -146,7 +146,7 @@ npx shadcn@latest add [component-name]
 2. **Feature Additions**
 
    - Real-time race updates
-   - Historical data comparison
+   - Historical data & comparisons
    - Driver statistics and analytics
    - User preferences and favourites
 
