@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { ThemeToggle } from './ThemeToggle';
 
-export default function Header() {
+export function Header() {
   return (
     <header>
       <nav className="bg-primary text-primary-foreground shadow-lg">

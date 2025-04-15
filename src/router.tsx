@@ -1,5 +1,5 @@
 import { Router, createRootRoute, createRoute } from '@tanstack/react-router';
-import Layout from './components/Layout';
+import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { Circuits } from './pages/Circuits';
 import { CircuitDetails } from './pages/CircuitDetails';

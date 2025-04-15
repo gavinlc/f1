@@ -1,7 +1,7 @@
-import { Outlet } from '@tanstack/react-router'
-import Header from './Header'
+import { Outlet } from '@tanstack/react-router';
+import { Header } from './Header';
 
-export default function Layout() {
+export function Layout() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -9,5 +9,5 @@ export default function Layout() {
         <Outlet />
       </main>
     </div>
-  )
+  );
 }
