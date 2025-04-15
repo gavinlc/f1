@@ -41,7 +41,7 @@ export function CircuitDetails() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Circuit Information</CardTitle>
@@ -56,23 +56,14 @@ export function CircuitDetails() {
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">Circuit ID</h3>
-                <p className="text-muted-foreground">{circuit.circuitId}</p>
+                <h3 className="font-semibold mb-2">Circuit Map</h3>
+                <CircuitMap
+                  latitude={latitude}
+                  longitude={longitude}
+                  circuitName={circuit.circuitName}
+                />
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Circuit Location</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CircuitMap
-              latitude={latitude}
-              longitude={longitude}
-              circuitName={circuit.circuitName}
-            />
           </CardContent>
         </Card>
       </div>
