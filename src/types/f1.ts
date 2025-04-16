@@ -37,7 +37,24 @@ export interface Constructor {
   nationality: string;
 }
 
-export interface Result {
+export interface Time {
+  millis?: string;
+  time: string;
+}
+
+export interface FastestLap {
+  rank: string;
+  lap: string;
+  Time: {
+    time: string;
+  };
+  AverageSpeed: {
+    units: string;
+    speed: string;
+  };
+}
+
+export interface RaceResult {
   number: string;
   position: string;
   positionText: string;
@@ -47,21 +64,8 @@ export interface Result {
   grid: string;
   laps: string;
   status: string;
-  Time?: {
-    millis: string;
-    time: string;
-  };
-  FastestLap?: {
-    rank: string;
-    lap: string;
-    Time: {
-      time: string;
-    };
-    AverageSpeed: {
-      units: string;
-      speed: string;
-    };
-  };
+  Time?: Time;
+  FastestLap?: FastestLap;
 }
 
 export interface Race {
@@ -72,6 +76,120 @@ export interface Race {
   Circuit: Circuit;
   date: string;
   time: string;
-  Results?: Array<Result>;
-  SprintResults?: Array<Result>;
+  Results?: Array<RaceResult>;
+  SprintResults?: Array<RaceResult>;
+  QualifyingResults?: Array<QualifyingResult>;
+  FirstPractice?: Session;
+  SecondPractice?: Session;
+  ThirdPractice?: Session;
+  Sprint?: Session;
+  Qualifying?: Session;
+}
+
+export interface QualifyingResult {
+  position: string;
+  Driver: Driver;
+  Constructor: Constructor;
+  Q1?: string;
+  Q2?: string;
+  Q3?: string;
+}
+
+export interface Session {
+  date: string;
+  time: string;
+}
+
+export interface DriverStanding {
+  position: string;
+  positionText: string;
+  points: string;
+  wins: string;
+  Driver: Driver;
+  Constructors: Array<Constructor>;
+}
+
+export interface ConstructorStanding {
+  position: string;
+  positionText: string;
+  points: string;
+  wins: string;
+  Constructor: Constructor;
+}
+
+export interface Lap {
+  number: string;
+  Timings: Array<{
+    driverId: string;
+    position: string;
+    time: string;
+  }>;
+}
+
+export interface RaceTable {
+  season: string;
+  round?: string;
+  Races: Array<Race>;
+}
+
+export interface DriverTable {
+  season: string;
+  round?: string;
+  Drivers: Array<Driver>;
+}
+
+export interface ConstructorTable {
+  season: string;
+  round?: string;
+  Constructors: Array<Constructor>;
+}
+
+export interface CircuitTable {
+  Circuits: Array<Circuit>;
+}
+
+export interface DriverStandingsTable {
+  season: string;
+  round?: string;
+  DriverStandings: Array<DriverStanding>;
+}
+
+export interface ConstructorStandingsTable {
+  season: string;
+  round?: string;
+  ConstructorStandings: Array<ConstructorStanding>;
+}
+
+export interface LapTable {
+  season: string;
+  round: string;
+  Races: Array<{
+    season: string;
+    round: string;
+    url: string;
+    raceName: string;
+    date: string;
+    time: string;
+    Laps: Array<Lap>;
+  }>;
+}
+
+export interface MRData {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+  RaceTable?: RaceTable;
+  DriverTable?: DriverTable;
+  ConstructorTable?: ConstructorTable;
+  CircuitTable?: CircuitTable;
+  DriverStandingsTable?: DriverStandingsTable;
+  ConstructorStandingsTable?: ConstructorStandingsTable;
+  LapTable?: LapTable;
+}
+
+export interface F1Response {
+  MRData: MRData;
 }

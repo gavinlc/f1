@@ -9,6 +9,7 @@ import {
 } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { CircuitMap } from '../components/CircuitMap';
+import { CircuitInfo } from '../components/CircuitInfo';
 
 export function CircuitDetails() {
   const { circuitId } = useParams({ from: '/circuits/$circuitId' });
@@ -48,12 +49,7 @@ export function CircuitDetails() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Location</h3>
-                <p className="text-muted-foreground">
-                  {circuit.Location.locality}, {circuit.Location.country}
-                </p>
-              </div>
+              <CircuitInfo circuit={circuit} />
 
               <div>
                 <h3 className="font-semibold mb-2">Circuit Map</h3>
