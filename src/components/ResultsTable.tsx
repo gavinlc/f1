@@ -1,3 +1,4 @@
+import { CountryFlag } from './CountryFlag';
 import type { RaceResult } from '../types/f1';
 import {
   Table,
@@ -51,9 +52,23 @@ export function ResultsTable({ results, title, raceDate }: ResultsTableProps) {
               <TableRow key={result.Driver.driverId}>
                 <TableCell>{result.position}</TableCell>
                 <TableCell>
-                  {result.Driver.givenName} {result.Driver.familyName}
+                  <div className="flex items-center gap-2">
+                    <CountryFlag
+                      nationality={result.Driver.nationality}
+                      className="w-6 h-4"
+                    />
+                    {result.Driver.givenName} {result.Driver.familyName}
+                  </div>
                 </TableCell>
-                <TableCell>{result.Constructor.name}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <CountryFlag
+                      nationality={result.Constructor.nationality}
+                      className="w-6 h-4"
+                    />
+                    {result.Constructor.name}
+                  </div>
+                </TableCell>
                 <TableCell>{result.Time?.time || result.status}</TableCell>
                 <TableCell>{result.points}</TableCell>
               </TableRow>

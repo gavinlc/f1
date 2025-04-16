@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
+import { CountryFlag } from './CountryFlag';
 import type { ConstructorStanding, DriverStanding } from '../types/f1';
 
 interface StandingsTableProps {
@@ -55,9 +56,29 @@ export function StandingsTable({
               >
                 <TableCell>{standing.position}</TableCell>
                 <TableCell>
-                  {type === 'driver'
-                    ? `${(standing as DriverStanding).Driver.givenName} ${(standing as DriverStanding).Driver.familyName}`
-                    : (standing as ConstructorStanding).Constructor.name}
+                  {type === 'driver' ? (
+                    <div className="flex items-center gap-2">
+                      <CountryFlag
+                        nationality={
+                          (standing as DriverStanding).Driver.nationality
+                        }
+                        className="w-6 h-4"
+                      />
+                      {(standing as DriverStanding).Driver.givenName}{' '}
+                      {(standing as DriverStanding).Driver.familyName}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <CountryFlag
+                        nationality={
+                          (standing as ConstructorStanding).Constructor
+                            .nationality
+                        }
+                        className="w-6 h-4"
+                      />
+                      {(standing as ConstructorStanding).Constructor.name}
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell>{standing.points}</TableCell>
                 <TableCell>{standing.wins}</TableCell>

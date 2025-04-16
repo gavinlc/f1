@@ -12,6 +12,7 @@ import {
 } from '../components/ui/card';
 import { Skeleton } from '../components/ui/skeleton';
 import { Page } from '../components/Page';
+import { CountryFlag } from '../components/CountryFlag';
 
 export function Constructors() {
   const setTitle = useStore(pageTitleStore, (state) => state.setTitle);
@@ -57,7 +58,13 @@ export function Constructors() {
         {constructors.map((constructor) => (
           <Card key={constructor.constructorId}>
             <CardHeader>
-              <CardTitle>{constructor.name}</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <CountryFlag
+                  nationality={constructor.nationality}
+                  className="w-6 h-4"
+                />
+                {constructor.name}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-1 text-muted-foreground">
