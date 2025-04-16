@@ -1,11 +1,12 @@
 import { Router, createRootRoute, createRoute } from '@tanstack/react-router';
-import { Layout } from './components/Layout';
+import { Layout } from './Layout';
 import { Home } from './pages/Home';
 import { Circuits } from './pages/Circuits';
 import { CircuitDetails } from './pages/CircuitDetails';
 import { Drivers } from './pages/Drivers';
 import { Constructors } from './pages/Constructors';
 import { Results } from './pages/Results';
+import { About } from './pages/About';
 import { RouterErrorBoundary } from './components/RouterErrorBoundary';
 
 const rootRoute = createRootRoute({
@@ -49,6 +50,12 @@ const resultsRoute = createRoute({
   component: Results,
 });
 
+const aboutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about',
+  component: About,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   circuitsRoute,
@@ -56,6 +63,7 @@ const routeTree = rootRoute.addChildren([
   driversRoute,
   constructorsRoute,
   resultsRoute,
+  aboutRoute,
 ]);
 
 export const router = new Router({ routeTree });

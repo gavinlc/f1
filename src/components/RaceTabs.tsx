@@ -41,11 +41,11 @@ export function RaceTabs({
       onValueChange={onRoundChange}
       className="w-full"
     >
-      <div className="relative">
+      <div className="flex gap-2">
         <Button
           variant="outline"
           size="icon"
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10"
+          className=""
           onClick={() => scrollTabs('left')}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -54,7 +54,7 @@ export function RaceTabs({
           className="overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           ref={tabsListRef}
         >
-          <TabsList className="flex gap-1 min-w-max px-10">
+          <TabsList className="flex gap-1 ">
             {races.map((race) => (
               <TabsTrigger
                 key={race.round}
@@ -69,7 +69,7 @@ export function RaceTabs({
         <Button
           variant="outline"
           size="icon"
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10"
+          className=""
           onClick={() => scrollTabs('right')}
         >
           <ChevronRight className="h-4 w-4" />

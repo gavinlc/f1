@@ -4,8 +4,8 @@ import { act, render, screen } from '@testing-library/react';
 import { RouterProvider } from '@tanstack/react-router';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { axe } from 'vitest-axe';
-import { router } from '../router';
-import { createTestQueryClient } from '../test/setup';
+import { router } from './router';
+import { createTestQueryClient } from './test/setup';
 
 const renderWithProviders = (ui: React.ReactElement) => {
   const testQueryClient = createTestQueryClient();

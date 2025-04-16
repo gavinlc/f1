@@ -1,5 +1,4 @@
-import { Switch } from './ui/switch';
-import { Label } from './ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { ResultsTable } from './ResultsTable';
 import { Skeleton } from './ui/skeleton';
@@ -43,38 +42,68 @@ export function RaceCard({
           </div>
 
           {hasSprintResults && (
-            <div className="flex items-center space-x-2 py-2">
-              <Switch
-                id="results-toggle"
-                checked={showSprint}
-                onCheckedChange={onSprintToggle}
-              />
-              <Label htmlFor="results-toggle">
-                {showSprint
-                  ? 'Showing Sprint Results'
-                  : 'Showing Grand Prix Results'}
-              </Label>
-            </div>
+            <Tabs
+              defaultValue={showSprint ? 'sprint' : 'race'}
+              onValueChange={(value) => onSprintToggle(value === 'sprint')}
+              className="w-full"
+            >
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="sprint">Sprint Results</TabsTrigger>
+                <TabsTrigger value="race">Grand Prix Results</TabsTrigger>
+              </TabsList>
+              <TabsContent value="sprint">
+                {isLoading ? (
+                  <div className="space-y-4">
+                    <Skeleton className="h-6 w-32" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-10 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                    </div>
+                  </div>
+                ) : (
+                  <ResultsTable
+                    results={sprintResults || []}
+                    title="Sprint Race Results"
+                    raceDate={race.date}
+                  />
+                )}
+              </TabsContent>
+              <TabsContent value="race">
+                {isLoading ? (
+                  <div className="space-y-4">
+                    <Skeleton className="h-6 w-32" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-10 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                    </div>
+                  </div>
+                ) : (
+                  <ResultsTable
+                    results={raceResults || []}
+                    title="Grand Prix Results"
+                    raceDate={race.date}
+                  />
+                )}
+              </TabsContent>
+            </Tabs>
           )}
 
-          {isLoading ? (
-            <div className="space-y-4">
-              <Skeleton className="h-6 w-32" />
-              <div className="space-y-2">
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-              </div>
-            </div>
-          ) : (
+          {!hasSprintResults && (
             <div className="space-y-8">
-              {showSprint ? (
-                <ResultsTable
-                  results={sprintResults || []}
-                  title="Sprint Race Results"
-                  raceDate={race.date}
-                />
+              {isLoading ? (
+                <div className="space-y-4">
+                  <Skeleton className="h-6 w-32" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                </div>
               ) : (
                 <ResultsTable
                   results={raceResults || []}

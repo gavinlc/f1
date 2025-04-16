@@ -5,6 +5,7 @@ import { RaceTabs } from '../components/RaceTabs';
 import { RaceCard } from '../components/RaceCard';
 import { TabsContent } from '../components/ui/tabs';
 import { Skeleton } from '../components/ui/skeleton';
+import { Page } from '../components/Page';
 
 export function Results() {
   const [selectedRound, setSelectedRound] = useState<string>('1');
@@ -32,16 +33,18 @@ export function Results() {
 
   if (isLoadingRaces) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-10 w-48" />
-        <div className="space-y-4">
-          <Skeleton className="h-10 w-full" />
+      <Page>
+        <div className="space-y-6">
+          <Skeleton className="h-10 w-48" />
           <div className="space-y-4">
-            <Skeleton className="h-[200px] w-full" />
-            <Skeleton className="h-[300px] w-full" />
+            <Skeleton className="h-10 w-full" />
+            <div className="space-y-4">
+              <Skeleton className="h-[200px] w-full" />
+              <Skeleton className="h-[300px] w-full" />
+            </div>
           </div>
         </div>
-      </div>
+      </Page>
     );
   }
 
@@ -50,18 +53,19 @@ export function Results() {
   // If no races are available, show a message
   if (races.length === 0) {
     return (
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold">2025 F1 Race Results</h1>
-        <p className="text-muted-foreground">
-          No race results available yet for the 2025 season.
-        </p>
-      </div>
+      <Page>
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold">2025 F1 Race Results</h1>
+          <p className="text-muted-foreground">
+            No race results available yet for the 2025 season.
+          </p>
+        </div>
+      </Page>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">2025 F1 Race Results</h1>
+    <Page>
       <RaceTabs
         races={races}
         selectedRound={selectedRound}
@@ -82,6 +86,6 @@ export function Results() {
           </TabsContent>
         ))}
       </RaceTabs>
-    </div>
+    </Page>
   );
 }
