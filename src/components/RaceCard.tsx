@@ -60,16 +60,17 @@ export function RaceCard({
             <div className="text-muted-foreground">Loading results...</div>
           ) : (
             <div className="space-y-8">
-              {showSprint && hasSprintResults && sprintResults && (
+              {showSprint ? (
                 <ResultsTable
-                  results={sprintResults}
+                  results={sprintResults || []}
                   title="Sprint Race Results"
+                  raceDate={race.date}
                 />
-              )}
-              {!showSprint && raceResults && (
+              ) : (
                 <ResultsTable
-                  results={raceResults}
+                  results={raceResults || []}
                   title="Grand Prix Results"
+                  raceDate={race.date}
                 />
               )}
             </div>

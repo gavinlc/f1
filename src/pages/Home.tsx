@@ -1,12 +1,34 @@
 import { Link } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
+import { f1Api } from '../services/f1Api';
+import { StandingsTable } from '../components/StandingsTable';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '../components/ui/card';
+import { Skeleton } from '../components/ui/skeleton';
 
 export function Home() {
+  const {
+    data: driverStandingsData,
+    isLoading: isLoadingDriverStandings,
+    error: driverStandingsError,
+  } = useQuery({
+    queryKey: ['driver-standings', '2025'],
+    queryFn: () => f1Api.getDriverStandings('2025'),
+  });
+
+  const {
+    data: constructorStandingsData,
+    isLoading: isLoadingConstructorStandings,
+    error: constructorStandingsError,
+  } = useQuery({
+    queryKey: ['constructor-standings', '2025'],
+    queryFn: () => f1Api.getConstructorStandings('2025'),
+  });
+
   const sections = [
     {
       title: '2025 Results',
@@ -37,6 +59,51 @@ export function Home() {
         Explore Formula 1 data from the Ergast API. Browse through circuits,
         drivers, constructors, and race results.
       </p>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {isLoadingDriverStandings ? (
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-32" />
+            <Skeleton className="h-[200px] w-full" />
+          </div>
+        ) : driverStandingsError ? (
+          <div className="p-4 border border-destructive rounded-lg">
+            <p className="text-destructive">Failed to load driver standings</p>
+          </div>
+        ) : (
+          <StandingsTable
+            title="Driver Standings"
+            standings={
+              driverStandingsData?.MRData.StandingsTable.StandingsLists[0]
+                ?.DriverStandings ?? []
+            }
+            type="driver"
+          />
+        )}
+
+        {isLoadingConstructorStandings ? (
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-40" />
+            <Skeleton className="h-[200px] w-full" />
+          </div>
+        ) : constructorStandingsError ? (
+          <div className="p-4 border border-destructive rounded-lg">
+            <p className="text-destructive">
+              Failed to load constructor standings
+            </p>
+          </div>
+        ) : (
+          <StandingsTable
+            title="Constructor Standings"
+            standings={
+              constructorStandingsData?.MRData.StandingsTable.StandingsLists[0]
+                ?.ConstructorStandings ?? []
+            }
+            type="constructor"
+          />
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {sections.map((section) => (
           <Link key={section.path} to={section.path}>

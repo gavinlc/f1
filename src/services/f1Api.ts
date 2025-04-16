@@ -1,7 +1,9 @@
 import type {
   Circuit,
   Constructor,
+  ConstructorStanding,
   Driver,
+  DriverStanding,
   F1ApiResponse,
   Race,
   Season,
@@ -87,6 +89,46 @@ export const f1Api = {
     circuitId: string,
   ): Promise<{ MRData: { CircuitTable: { Circuits: Array<Circuit> } } }> => {
     const response = await fetch(`${BASE_URL}/circuits/${circuitId}.json`);
+    return response.json();
+  },
+
+  getDriverStandings: async (
+    season: string,
+  ): Promise<{
+    MRData: {
+      StandingsTable: {
+        season: string;
+        round: string;
+        StandingsLists: Array<{
+          season: string;
+          round: string;
+          DriverStandings: Array<DriverStanding>;
+        }>;
+      };
+    };
+  }> => {
+    const response = await fetch(`${BASE_URL}/${season}/driverstandings.json`);
+    return response.json();
+  },
+
+  getConstructorStandings: async (
+    season: string,
+  ): Promise<{
+    MRData: {
+      StandingsTable: {
+        season: string;
+        round: string;
+        StandingsLists: Array<{
+          season: string;
+          round: string;
+          ConstructorStandings: Array<ConstructorStanding>;
+        }>;
+      };
+    };
+  }> => {
+    const response = await fetch(
+      `${BASE_URL}/${season}/constructorstandings.json`,
+    );
     return response.json();
   },
 };
