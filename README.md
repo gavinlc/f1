@@ -151,6 +151,7 @@ npx shadcn@latest add [component-name]
    - User preferences and favourites
 
 3. **Technical Debt**
+   - Some components might benefit from further decomposition (particularly the Results page)
    - Add comprehensive test coverage
    - Implement E2E testing with Cypress or Playwright
    - Add performance monitoring
