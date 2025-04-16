@@ -4,6 +4,7 @@ import { f1Api } from '../services/f1Api';
 import { RaceTabs } from '../components/RaceTabs';
 import { RaceCard } from '../components/RaceCard';
 import { TabsContent } from '../components/ui/tabs';
+import { Skeleton } from '../components/ui/skeleton';
 
 export function Results() {
   const [selectedRound, setSelectedRound] = useState<string>('1');
@@ -30,7 +31,18 @@ export function Results() {
   });
 
   if (isLoadingRaces) {
-    return <div>Loading...</div>;
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-10 w-48" />
+        <div className="space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <div className="space-y-4">
+            <Skeleton className="h-[200px] w-full" />
+            <Skeleton className="h-[300px] w-full" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const races = racesData?.MRData.RaceTable.Races || [];

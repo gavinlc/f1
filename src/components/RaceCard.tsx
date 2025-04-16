@@ -2,6 +2,7 @@ import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { ResultsTable } from './ResultsTable';
+import { Skeleton } from './ui/skeleton';
 import type { Race, RaceResult } from '../types/f1';
 
 interface RaceCardProps {
@@ -57,7 +58,15 @@ export function RaceCard({
           )}
 
           {isLoading ? (
-            <div className="text-muted-foreground">Loading results...</div>
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-32" />
+              <div className="space-y-2">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            </div>
           ) : (
             <div className="space-y-8">
               {showSprint ? (

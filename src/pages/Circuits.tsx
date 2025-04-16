@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../components/ui/card';
+import { Skeleton } from '../components/ui/skeleton';
 
 export function Circuits() {
   const { data, isLoading } = useQuery({
@@ -15,7 +16,26 @@ export function Circuits() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-10 w-48" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, index) => (
+            <Card key={index} className="hover:bg-accent transition-colors">
+              <CardHeader>
+                <Skeleton className="h-6 w-40" />
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   const circuits = data?.MRData.CircuitTable.Circuits || [];

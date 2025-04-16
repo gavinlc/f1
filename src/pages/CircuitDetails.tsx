@@ -10,6 +10,7 @@ import {
 import { Button } from '../components/ui/button';
 import { CircuitMap } from '../components/CircuitMap';
 import { CircuitInfo } from '../components/CircuitInfo';
+import { Skeleton } from '../components/ui/skeleton';
 
 export function CircuitDetails() {
   const { circuitId } = useParams({ from: '/circuits/$circuitId' });
@@ -20,7 +21,32 @@ export function CircuitDetails() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-10 w-64" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-40" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-4 w-40" />
+              </div>
+              <div>
+                <Skeleton className="h-6 w-32 mb-2" />
+                <Skeleton className="h-[300px] w-full" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   const circuit = data?.MRData.CircuitTable.Circuits[0];
