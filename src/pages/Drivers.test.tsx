@@ -5,13 +5,11 @@ import {
   render,
   screen,
   waitFor,
-  within,
 } from '@testing-library/react';
-import { RouterProvider } from '@tanstack/react-router';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { router } from '../router';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
+import { Drivers } from './Drivers';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -20,9 +18,42 @@ vi.mock('../services/f1Api', () => ({
   },
 }));
 
+// Mock the router
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
+}));
+
 // Mock the useAge hook
 vi.mock('../hooks/useAge', () => ({
   useAge: () => 26,
+}));
+
+// Mock the pageTitleStore
+vi.mock('../stores/pageTitleStore', () => ({
+  pageTitleStore: {
+    getState: vi.fn().mockReturnValue({
+      setPageTitle: vi.fn(),
+    }),
+  },
+}));
+
+// Mock the useStore hook
+vi.mock('@tanstack/react-store', () => ({
+  useStore: vi.fn().mockReturnValue(vi.fn()),
 }));
 
 const renderWithProviders = (ui: React.ReactElement) => {
@@ -35,38 +66,14 @@ const renderWithProviders = (ui: React.ReactElement) => {
 describe('Drivers', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Default mock response for all tests
-    const defaultMockDrivers = {
-      MRData: {
-        DriverTable: {
-          Drivers: [],
-        },
-      },
-    };
-
-    vi.mocked(f1Api.getDrivers).mockResolvedValue(defaultMockDrivers);
   });
 
   test('renders loading state initially', async () => {
     // Override the default mock to simulate loading
     vi.mocked(f1Api.getDrivers).mockImplementation(() => new Promise(() => {}));
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
+    renderWithProviders(<Drivers />);
 
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const driversLink = within(sidebar).getByRole('link', {
-      name: 'Drivers',
-    });
-    await act(async () => {
-      fireEvent.click(driversLink);
-    });
-
-    // Check for skeleton loading state
     expect(screen.getByTestId('skeleton')).toBeDefined();
   });
 
@@ -93,25 +100,15 @@ describe('Drivers', () => {
 
     vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers);
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
+    renderWithProviders(<Drivers />);
+
+    // Wait for the loading state to disappear
+    await waitFor(() => {
+      expect(screen.queryByTestId('skeleton')).toBeNull();
     });
 
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const driversLink = within(sidebar).getByRole('link', {
-      name: 'Drivers',
-    });
-    await act(async () => {
-      fireEvent.click(driversLink);
-    });
-
-    // Wait for driver data to load
-    const driverName = await screen.findByText('Max Verstappen (VER)');
-    expect(driverName).toBeDefined();
-
-    // Check driver details
+    // Check if the driver details are rendered
+    expect(screen.getByText('Max Verstappen (VER)')).toBeDefined();
     expect(screen.getByText(/Dutch/)).toBeDefined();
     expect(screen.getByText(/26/)).toBeDefined(); // Age from mocked useAge hook
     expect(screen.getByText(/VER/)).toBeDefined();
@@ -129,23 +126,12 @@ describe('Drivers', () => {
 
     vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers);
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
-
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const driversLink = within(sidebar).getByRole('link', {
-      name: 'Drivers',
-    });
-    await act(async () => {
-      fireEvent.click(driversLink);
-    });
+    renderWithProviders(<Drivers />);
 
     // Wait for loading to finish
-    const loadingText = screen.queryByText('Loading...');
-    waitFor(() => expect(loadingText).toBeNull());
+    await waitFor(() => {
+      expect(screen.queryByTestId('skeleton')).toBeNull();
+    });
 
     // Verify no drivers are rendered
     expect(screen.queryByText(/Verstappen/)).toBeNull();

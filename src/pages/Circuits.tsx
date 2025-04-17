@@ -69,8 +69,9 @@ export function Circuits() {
             key={circuit.circuitId}
             to="/circuits/$circuitId"
             params={{ circuitId: circuit.circuitId }}
+            className="group"
           >
-            <Card className="hover:bg-accent transition-colors">
+            <Card>
               <CardHeader>
                 <CardTitle>{circuit.circuitName}</CardTitle>
               </CardHeader>

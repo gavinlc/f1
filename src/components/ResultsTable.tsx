@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { CountryFlag } from './CountryFlag';
 import type { RaceResult } from '../types/f1';
 import {
@@ -52,22 +53,30 @@ export function ResultsTable({ results, title, raceDate }: ResultsTableProps) {
               <TableRow key={result.Driver.driverId}>
                 <TableCell>{result.position}</TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2">
+                  <Link
+                    to="/drivers/$driverId"
+                    params={{ driverId: result.Driver.driverId }}
+                    className="flex items-center gap-2 hover:underline"
+                  >
                     <CountryFlag
                       nationality={result.Driver.nationality}
                       className="w-6 h-4"
                     />
                     {result.Driver.givenName} {result.Driver.familyName}
-                  </div>
+                  </Link>
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2">
+                  <Link
+                    to="/constructors/$constructorId"
+                    params={{ constructorId: result.Constructor.constructorId }}
+                    className="flex items-center gap-2 hover:underline"
+                  >
                     <CountryFlag
                       nationality={result.Constructor.nationality}
                       className="w-6 h-4"
                     />
                     {result.Constructor.name}
-                  </div>
+                  </Link>
                 </TableCell>
                 <TableCell>{result.Time?.time || result.status}</TableCell>
                 <TableCell>{result.points}</TableCell>

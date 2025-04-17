@@ -1,6 +1,26 @@
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import { RaceResultsTable } from './RaceResultsTable';
-import type { Race, RaceResult } from '../types/f1';
+import type { Race } from '../types/f1';
+
+// Mock the router
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
+}));
 
 describe('RaceResultsTable', () => {
   const mockRaces: Array<Race> = [

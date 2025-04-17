@@ -5,19 +5,50 @@ import {
   render,
   screen,
   waitFor,
-  within,
 } from '@testing-library/react';
-import { RouterProvider } from '@tanstack/react-router';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { router } from '../router';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
+import { Constructors } from './Constructors';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
   f1Api: {
     getConstructors: vi.fn(),
   },
+}));
+
+// Mock the router
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
+}));
+
+// Mock the pageTitleStore
+vi.mock('../stores/pageTitleStore', () => ({
+  pageTitleStore: {
+    getState: vi.fn().mockReturnValue({
+      setPageTitle: vi.fn(),
+    }),
+  },
+}));
+
+// Mock the useStore hook
+vi.mock('@tanstack/react-store', () => ({
+  useStore: vi.fn().mockReturnValue(vi.fn()),
 }));
 
 const renderWithProviders = (ui: React.ReactElement) => {
@@ -30,17 +61,6 @@ const renderWithProviders = (ui: React.ReactElement) => {
 describe('Constructors', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Default mock response for all tests
-    const defaultMockConstructors = {
-      MRData: {
-        ConstructorTable: {
-          Constructors: [],
-        },
-      },
-    };
-
-    vi.mocked(f1Api.getConstructors).mockResolvedValue(defaultMockConstructors);
   });
 
   test('renders loading state initially', async () => {
@@ -49,14 +69,9 @@ describe('Constructors', () => {
       () => new Promise(() => {}),
     );
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
-    await act(async () => {
-      fireEvent.click(constructorsLink);
-    });
-    expect(await screen.findByText('Loading...')).toBeDefined();
+    renderWithProviders(<Constructors />);
+
+    expect(screen.getByText('Loading...')).toBeDefined();
   });
 
   test('renders constructor list when data is loaded', async () => {
@@ -78,26 +93,15 @@ describe('Constructors', () => {
 
     vi.mocked(f1Api.getConstructors).mockResolvedValueOnce(mockConstructors);
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
+    renderWithProviders(<Constructors />);
+
+    // Wait for the loading state to disappear
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).toBeNull();
     });
 
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const constructorsLink = within(sidebar).getByRole('link', {
-      name: 'Constructors',
-    });
-
-    await act(async () => {
-      fireEvent.click(constructorsLink);
-    });
-
-    // Wait for constructor data to load
-    const constructorName = await screen.findByText('Red Bull Racing');
-    expect(constructorName).toBeDefined();
-
-    // Check constructor details
+    // Check if the constructor details are rendered
+    expect(screen.getByText('Red Bull Racing')).toBeDefined();
     expect(screen.getByText(/Austrian/)).toBeDefined();
   });
 
@@ -113,24 +117,12 @@ describe('Constructors', () => {
 
     vi.mocked(f1Api.getConstructors).mockResolvedValueOnce(mockConstructors);
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
-
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const constructorsLink = within(sidebar).getByRole('link', {
-      name: 'Constructors',
-    });
-
-    await act(async () => {
-      fireEvent.click(constructorsLink);
-    });
+    renderWithProviders(<Constructors />);
 
     // Wait for loading to finish
-    const loadingText = screen.queryByText('Loading...');
-    waitFor(() => expect(loadingText).toBeNull());
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).toBeNull();
+    });
 
     // Verify no constructors are rendered
     expect(screen.queryByText(/Red Bull Racing/)).toBeNull();

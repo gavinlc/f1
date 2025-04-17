@@ -57,6 +57,7 @@ export function Drivers() {
             key={driver.driverId}
             to="/drivers/$driverId"
             params={{ driverId: driver.driverId }}
+            className="group"
           >
             <DriverCard driver={driver} />
           </Link>

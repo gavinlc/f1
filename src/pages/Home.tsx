@@ -141,8 +141,8 @@ export function Home() {
             Quick Navigation
           </h2>
           {sections.map((section) => (
-            <Link key={section.path} to={section.path}>
-              <Card className="h-full transition-all duration-200 hover:bg-accent hover:scale-[1.02] hover:shadow-md">
+            <Link key={section.path} to={section.path} className="group">
+              <Card className="h-full">
                 <CardHeader>
                   <CardTitle
                     data-testid={`${section.title.toLowerCase()}-card-title`}

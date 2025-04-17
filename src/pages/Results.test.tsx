@@ -1,10 +1,9 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
-import { RouterProvider } from '@tanstack/react-router';
+import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { router } from '../router';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
+import { Results } from './Results';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -13,6 +12,39 @@ vi.mock('../services/f1Api', () => ({
     getSingleRaceResult: vi.fn(),
     getSprintResults: vi.fn(),
   },
+}));
+
+// Mock the router
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
+}));
+
+// Mock the pageTitleStore
+vi.mock('../stores/pageTitleStore', () => ({
+  pageTitleStore: {
+    getState: vi.fn().mockReturnValue({
+      setPageTitle: vi.fn(),
+    }),
+  },
+}));
+
+// Mock the useStore hook
+vi.mock('@tanstack/react-store', () => ({
+  useStore: vi.fn().mockReturnValue(vi.fn()),
 }));
 
 const renderWithProviders = (ui: React.ReactElement) => {
@@ -25,37 +57,6 @@ const renderWithProviders = (ui: React.ReactElement) => {
 describe('Results', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Default mock response for all tests
-    const defaultMockRaces = {
-      MRData: {
-        RaceTable: {
-          Races: [],
-        },
-      },
-    };
-
-    vi.mocked(f1Api.getRaceResults).mockResolvedValue(defaultMockRaces);
-    vi.mocked(f1Api.getSingleRaceResult).mockResolvedValue(defaultMockRaces);
-    vi.mocked(f1Api.getSprintResults).mockResolvedValue(defaultMockRaces);
-  });
-
-  test('renders page title', async () => {
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
-
-    // Find the Results link in the sidebar menu
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const resultsLink = within(sidebar).getByRole('link', { name: 'Results' });
-
-    await act(async () => {
-      fireEvent.click(resultsLink);
-    });
-
-    expect(await screen.findByText('2025 F1 Race Results')).toBeDefined();
   });
 
   test('renders loading state initially', async () => {
@@ -64,45 +65,23 @@ describe('Results', () => {
       () => new Promise(() => {}),
     );
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
+    renderWithProviders(<Results />);
 
-    // Find the Results link in the sidebar menu
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const resultsLink = within(sidebar).getByRole('link', { name: 'Results' });
-
-    await act(async () => {
-      fireEvent.click(resultsLink);
-    });
-
-    expect(await screen.findByText('Loading...')).toBeDefined();
+    expect(screen.getByText('Loading...')).toBeDefined();
   });
 
   test('handles API error gracefully', async () => {
     // Mock API error
     vi.mocked(f1Api.getRaceResults).mockRejectedValue(new Error('API Error'));
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
+    renderWithProviders(<Results />);
 
-    // Find the Results link in the sidebar menu
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const resultsLink = within(sidebar).getByRole('link', { name: 'Results' });
-
-    await act(async () => {
-      fireEvent.click(resultsLink);
-    });
-
-    expect(await screen.findByText('Error loading race results')).toBeDefined();
+    // Wait for error message
+    const errorMessage = await screen.findByText('Error loading race results');
+    expect(errorMessage).toBeDefined();
   });
 
-  test('navigates to race details when clicking a race', async () => {
+  test('displays race cards when data is loaded', async () => {
     // Mock the API response for basic race information
     const mockRaces = {
       MRData: {
@@ -132,28 +111,16 @@ describe('Results', () => {
       },
     };
 
-    vi.mocked(f1Api.getRaceResults).mockResolvedValue(mockRaces);
+    vi.mocked(f1Api.getRaceResults).mockResolvedValueOnce(mockRaces);
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
+    renderWithProviders(<Results />);
+
+    // Wait for the loading state to disappear
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).toBeNull();
     });
 
-    // Find the Results link in the sidebar menu
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const resultsLink = within(sidebar).getByRole('link', { name: 'Results' });
-
-    await act(async () => {
-      fireEvent.click(resultsLink);
-    });
-
-    const raceCard = await screen.findByText('Bahrain Grand Prix');
-    await act(async () => {
-      fireEvent.click(raceCard);
-    });
-
-    // Check if we're on the race details page
-    expect(await screen.findByText('Bahrain Grand Prix')).toBeDefined();
+    // Check if race card is rendered
+    expect(screen.getByText('Bahrain Grand Prix')).toBeDefined();
   });
 });

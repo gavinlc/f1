@@ -10,6 +10,25 @@ vi.mock('./CountryFlag', () => ({
   ),
 }));
 
+// Mock the router
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
+}));
+
 describe('ResultsTable', () => {
   const mockResults: Array<RaceResult> = [
     {

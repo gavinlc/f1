@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import {
   Table,
   TableBody,
@@ -22,30 +23,24 @@ export function StandingsTable({
 }: StandingsTableProps) {
   if (standings.length === 0) {
     return (
-      <div className="space-y-4" aria-label={title}>
-        <h3 className="text-lg font-semibold" data-testid="standings-title">
-          {title}
-        </h3>
-        <div className="p-4 border rounded-lg">
-          <p className="text-muted-foreground">No standings data available</p>
-        </div>
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold">{title}</h2>
+        <p>No standings available</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4" aria-label={title}>
-      <h3 className="text-lg font-semibold" data-testid="standings-title">
-        {title}
-      </h3>
-      <div className="overflow-x-auto">
+    <div className="space-y-2">
+      <h2 className="text-2xl font-bold">{title}</h2>
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-16">Pos</TableHead>
-              <TableHead>{type === 'driver' ? 'Driver' : 'Team'}</TableHead>
-              <TableHead className="w-16">Points</TableHead>
-              <TableHead className="w-16">Wins</TableHead>
+              <TableHead>Position</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Points</TableHead>
+              <TableHead>Wins</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -61,7 +56,13 @@ export function StandingsTable({
                 <TableCell>{standing.position}</TableCell>
                 <TableCell>
                   {type === 'driver' ? (
-                    <div className="flex items-center gap-2">
+                    <Link
+                      to="/drivers/$driverId"
+                      params={{
+                        driverId: (standing as DriverStanding).Driver.driverId,
+                      }}
+                      className="flex items-center gap-2 hover:underline"
+                    >
                       <CountryFlag
                         nationality={
                           (standing as DriverStanding).Driver.nationality
@@ -70,9 +71,16 @@ export function StandingsTable({
                       />
                       {(standing as DriverStanding).Driver.givenName}{' '}
                       {(standing as DriverStanding).Driver.familyName}
-                    </div>
+                    </Link>
                   ) : (
-                    <div className="flex items-center gap-2">
+                    <Link
+                      to="/constructors/$constructorId"
+                      params={{
+                        constructorId: (standing as ConstructorStanding)
+                          .Constructor.constructorId,
+                      }}
+                      className="flex items-center gap-2 hover:underline"
+                    >
                       <CountryFlag
                         nationality={
                           (standing as ConstructorStanding).Constructor
@@ -81,7 +89,7 @@ export function StandingsTable({
                         className="w-6 h-4"
                       />
                       {(standing as ConstructorStanding).Constructor.name}
-                    </div>
+                    </Link>
                   )}
                 </TableCell>
                 <TableCell>{standing.points}</TableCell>

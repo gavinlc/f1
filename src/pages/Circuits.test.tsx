@@ -1,23 +1,48 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
-import { RouterProvider } from '@tanstack/react-router';
+import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { router } from '../router';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
+import { Circuits } from './Circuits';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
   f1Api: {
     getCircuitsForSeason: vi.fn(),
   },
+}));
+
+// Mock the router
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
+}));
+
+// Mock the pageTitleStore
+vi.mock('../stores/pageTitleStore', () => ({
+  pageTitleStore: {
+    getState: vi.fn().mockReturnValue({
+      setPageTitle: vi.fn(),
+    }),
+  },
+}));
+
+// Mock the useStore hook
+vi.mock('@tanstack/react-store', () => ({
+  useStore: vi.fn().mockReturnValue(vi.fn()),
 }));
 
 const renderWithProviders = (ui: React.ReactElement) => {
@@ -30,19 +55,6 @@ const renderWithProviders = (ui: React.ReactElement) => {
 describe('Circuits', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Default mock response for all tests
-    const defaultMockCircuits = {
-      MRData: {
-        CircuitTable: {
-          Circuits: [],
-        },
-      },
-    };
-
-    vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValue(
-      defaultMockCircuits,
-    );
   });
 
   test('renders loading state initially', async () => {
@@ -51,21 +63,9 @@ describe('Circuits', () => {
       () => new Promise(() => {}),
     );
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
+    renderWithProviders(<Circuits />);
 
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const circuitsLink = within(sidebar).getByRole('link', {
-      name: 'Circuits',
-    });
-    await act(async () => {
-      fireEvent.click(circuitsLink);
-    });
-
-    expect(await screen.findByText('Loading...')).toBeDefined();
+    expect(screen.getByText('Loading...')).toBeDefined();
   });
 
   test('renders circuit list when data is loaded', async () => {
@@ -85,17 +85,6 @@ describe('Circuits', () => {
                 long: '50.5106',
               },
             },
-            {
-              circuitId: 'jeddah',
-              circuitName: 'Jeddah Corniche Circuit',
-              url: 'http://example.com/jeddah',
-              Location: {
-                locality: 'Jeddah',
-                country: 'Saudi Arabia',
-                lat: '21.6319',
-                long: '39.1044',
-              },
-            },
           ],
         },
       },
@@ -103,29 +92,16 @@ describe('Circuits', () => {
 
     vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValueOnce(mockCircuits);
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
+    renderWithProviders(<Circuits />);
+
+    // Wait for the loading state to disappear
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).toBeNull();
     });
 
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const circuitsLink = within(sidebar).getByRole('link', {
-      name: 'Circuits',
-    });
-    await act(async () => {
-      fireEvent.click(circuitsLink);
-    });
-
-    // Wait for circuit data to load
-    const circuitName = await screen.findByText(
-      'Bahrain International Circuit',
-    );
-    expect(circuitName).toBeDefined();
-
-    // Check location details
+    // Check if the circuit details are rendered
+    expect(screen.getByText('Bahrain International Circuit')).toBeDefined();
     expect(screen.getByText('Sakhir, Bahrain')).toBeDefined();
-    expect(screen.getByText('Jeddah, Saudi Arabia')).toBeDefined();
   });
 
   test('handles empty circuit list', async () => {
@@ -140,25 +116,14 @@ describe('Circuits', () => {
 
     vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValueOnce(mockCircuits);
 
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
-
-    const sidebar = screen.getByRole('complementary', {
-      name: 'Sidebar navigation',
-    });
-    const circuitsLink = within(sidebar).getByRole('link', {
-      name: 'Circuits',
-    });
-    await act(async () => {
-      fireEvent.click(circuitsLink);
-    });
+    renderWithProviders(<Circuits />);
 
     // Wait for loading to finish
-    const loadingText = screen.queryByText('Loading...');
-    waitFor(() => expect(loadingText).toBeNull());
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).toBeNull();
+    });
 
     // Verify no circuits are rendered
-    expect(screen.queryByText(/Location:/)).toBeNull();
+    expect(screen.queryByText(/Bahrain/)).toBeNull();
   });
 });

@@ -64,8 +64,9 @@ export function Constructors() {
             key={constructor.constructorId}
             to="/constructors/$constructorId"
             params={{ constructorId: constructor.constructorId }}
+            className="group"
           >
-            <Card className="hover:bg-accent transition-colors">
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CountryFlag

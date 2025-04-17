@@ -2,13 +2,27 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { f1Api } from '../services/f1Api';
-import { pageTitleStore } from '../stores/pageTitleStore';
 import { DriverDetails } from './DriverDetails';
 
 // Mock the router
 vi.mock('@tanstack/react-router', () => ({
   useParams: () => ({ driverId: 'hamilton' }),
   useMatches: () => [{ pathname: '/drivers/hamilton' }],
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
 }));
 
 // Mock the f1Api service
@@ -164,20 +178,29 @@ describe('DriverDetails', () => {
   });
 
   it('shows loading state initially', () => {
+    // Override the default mock to simulate loading
+    (f1Api.getDriver as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      () => new Promise(() => {}),
+    );
+
     renderDriverDetails();
-    expect(screen.getByTestId('loading-skeleton')).toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
   it('displays driver details when data is loaded', async () => {
     renderDriverDetails();
 
+    // Wait for the loading state to disappear
     await waitFor(() => {
-      expect(screen.getByText('Lewis Hamilton')).toBeInTheDocument();
-      expect(screen.getByText('Driver #44')).toBeInTheDocument();
-      expect(screen.getByText('British')).toBeInTheDocument();
-      expect(screen.getByText('39')).toBeInTheDocument();
-      expect(screen.getByText('Mercedes')).toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).toBeNull();
     });
+
+    // Check if the driver details are rendered
+    expect(screen.getByText('Lewis Hamilton (HAM)')).toBeInTheDocument();
+    expect(screen.getByText('Driver #44')).toBeInTheDocument();
+    expect(screen.getByText('British')).toBeInTheDocument();
+    expect(screen.getByText('39')).toBeInTheDocument();
+    expect(screen.getByText('Mercedes')).toBeInTheDocument();
   });
 
   it('shows not found message when driver does not exist', async () => {
@@ -187,8 +210,21 @@ describe('DriverDetails', () => {
 
     renderDriverDetails();
 
+    // Wait for the "not found" message
+    const notFoundMessage = await screen.findByText(/driver not found/i);
+    expect(notFoundMessage).toBeInTheDocument();
+  });
+
+  it('renders constructor link correctly', async () => {
+    renderDriverDetails();
+
+    // Wait for the loading state to disappear
     await waitFor(() => {
-      expect(screen.getByText(/driver not found/i)).toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).toBeNull();
     });
+
+    const constructorLink = screen.getByRole('link', { name: 'Mercedes' });
+    expect(constructorLink).toBeInTheDocument();
+    expect(constructorLink).toHaveAttribute('href', '/constructors/mercedes');
   });
 });

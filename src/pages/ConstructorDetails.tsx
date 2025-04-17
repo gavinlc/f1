@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from '@tanstack/react-router';
+import { Link, useParams } from '@tanstack/react-router';
 import { useStore } from '@tanstack/react-store';
 import { useEffect } from 'react';
 import { f1Api } from '../services/f1Api';
@@ -23,6 +23,7 @@ import { DriverCard } from '../components/DriverCard';
 import { RaceResultsTable } from '../components/RaceResultsTable';
 import { LoadingSkeleton } from '../components/LoadingSkeleton';
 import { NotFoundMessage } from '../components/NotFoundMessage';
+import type { Race } from '../types/f1';
 
 export function ConstructorDetails() {
   const { constructorId } = useParams({ from: '/constructors/$constructorId' });
@@ -57,34 +58,30 @@ export function ConstructorDetails() {
       queryKey: ['constructor-sprint-results', constructorId, '2025'],
       queryFn: async () => {
         const races = allRacesData?.MRData.RaceTable.Races || [];
-        console.log('Fetching sprint results for races:', races);
-        const sprintResults = await Promise.all(
-          races.map(async (race) => {
-            try {
-              const result = await f1Api.getSprintResults('2025', race.round);
-              console.log(`Sprint result for race ${race.round}:`, result);
-              const sprintResults =
-                result.MRData.RaceTable.Races[0]?.SprintResults;
-              // Only return the result if it has sprint results
-              if (sprintResults && sprintResults.length > 0) {
-                return {
-                  round: race.round,
-                  Results: sprintResults,
-                };
-              }
-              return null;
-            } catch (error) {
-              console.log(`No sprint result for race ${race.round}`);
-              return null;
-            }
-          }),
-        );
-        const filteredResults = sprintResults.filter(Boolean);
-        console.log('Final sprint results:', filteredResults);
-        return filteredResults;
+        const sprintResults = await fetchSprintResults(races);
+        return sprintResults;
       },
       enabled: !!allRacesData,
     });
+
+  const fetchSprintResults = async (races: Array<Race>) => {
+    const filteredResults = [];
+    for (const race of races) {
+      try {
+        const result = await f1Api.getSprintResults('2025', race.round);
+        const sprintResults = result.MRData.RaceTable.Races[0]?.SprintResults;
+        if (sprintResults && sprintResults.length > 0) {
+          filteredResults.push({
+            round: race.round,
+            Results: sprintResults,
+          });
+        }
+      } catch (error) {
+        // Handle error silently
+      }
+    }
+    return filteredResults;
+  };
 
   useEffect(() => {
     if (constructorData?.MRData.ConstructorTable.Constructors[0]) {
@@ -145,7 +142,14 @@ export function ConstructorDetails() {
           <TabsContent value="drivers">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {drivers.map((driver) => (
-                <DriverCard key={driver.driverId} driver={driver} />
+                <Link
+                  key={driver.driverId}
+                  to="/drivers/$driverId"
+                  params={{ driverId: driver.driverId }}
+                  className="group"
+                >
+                  <DriverCard driver={driver} />
+                </Link>
               ))}
             </div>
           </TabsContent>

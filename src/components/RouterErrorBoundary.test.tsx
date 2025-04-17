@@ -10,6 +10,9 @@ vi.stubGlobal('location', { reload: mockReload });
 const mockNavigate = vi.fn();
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => mockNavigate,
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <a href={href}>{children}</a>
+  ),
 }));
 
 describe('RouterErrorBoundary', () => {

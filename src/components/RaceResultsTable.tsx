@@ -1,3 +1,5 @@
+import React from 'react';
+import { Link } from '@tanstack/react-router';
 import {
   Table,
   TableBody,
@@ -31,12 +33,9 @@ export function RaceResultsTable({
 
   // Create a map of sprint results for quick lookup
   const sprintResultsMap = new Map();
-  console.log('Sprint results received:', sprintResults);
   sprintResults?.forEach((race) => {
-    console.log('Processing sprint result for race:', race);
     sprintResultsMap.set(race.round, race);
   });
-  console.log('Sprint results map:', Object.fromEntries(sprintResultsMap));
 
   if (viewMode === 'driver') {
     return (
@@ -60,7 +59,6 @@ export function RaceResultsTable({
               const sprint = sprintResult?.Results?.find(
                 (r: RaceResult) => r.Driver.driverId === drivers[0].driverId,
               );
-              console.log(`Race ${race.round} sprint result:`, sprint);
 
               // Check if the race has already happened
               const raceDate = new Date(race.date);
@@ -68,7 +66,7 @@ export function RaceResultsTable({
               const isUpcoming = raceDate > today;
 
               return (
-                <>
+                <React.Fragment key={`${race.round}-container`}>
                   <TableRow key={`${race.round}-race`}>
                     <TableCell className="font-medium">
                       {race.raceName}
@@ -138,7 +136,7 @@ export function RaceResultsTable({
                       </TableCell>
                     </TableRow>
                   )}
-                </>
+                </React.Fragment>
               );
             })}
           </TableBody>
@@ -159,14 +157,18 @@ export function RaceResultsTable({
             <TableHead>Date</TableHead>
             {drivers.map((driver) => (
               <TableHead key={driver.driverId} className="min-w-[120px]">
-                <div className="flex flex-col">
+                <Link
+                  to="/drivers/$driverId"
+                  params={{ driverId: driver.driverId }}
+                  className="flex flex-col hover:underline"
+                >
                   <span className="font-medium">
                     {driver.givenName} {driver.familyName}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     #{driver.permanentNumber}
                   </span>
-                </div>
+                </Link>
               </TableHead>
             ))}
           </TableRow>

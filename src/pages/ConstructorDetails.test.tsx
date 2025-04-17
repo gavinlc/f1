@@ -2,13 +2,27 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { f1Api } from '../services/f1Api';
-import { pageTitleStore } from '../stores/pageTitleStore';
 import { ConstructorDetails } from './ConstructorDetails';
 
 // Mock the router
 vi.mock('@tanstack/react-router', () => ({
   useParams: () => ({ constructorId: 'mercedes' }),
   useMatches: () => [{ pathname: '/constructors/mercedes' }],
+  Link: ({
+    href,
+    children,
+    to,
+    className,
+  }: {
+    href?: string;
+    to?: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href || to} className={className} role="link">
+      {children}
+    </a>
+  ),
 }));
 
 // Mock the f1Api service
@@ -155,17 +169,26 @@ describe('ConstructorDetails', () => {
   });
 
   it('shows loading state initially', () => {
+    // Override the default mock to simulate loading
+    (
+      f1Api.getConstructor as unknown as ReturnType<typeof vi.fn>
+    ).mockImplementation(() => new Promise(() => {}));
+
     renderConstructorDetails();
-    expect(screen.getByTestId('loading-skeleton')).toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
   it('displays constructor details when data is loaded', async () => {
     renderConstructorDetails();
 
+    // Wait for the loading state to disappear
     await waitFor(() => {
-      expect(screen.getByText('Mercedes')).toBeInTheDocument();
-      expect(screen.getByText('German')).toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).toBeNull();
     });
+
+    // Check if the constructor details are rendered
+    expect(screen.getByText('Mercedes')).toBeInTheDocument();
+    expect(screen.getByText('German')).toBeInTheDocument();
   });
 
   it('shows not found message when constructor does not exist', async () => {
@@ -177,8 +200,8 @@ describe('ConstructorDetails', () => {
 
     renderConstructorDetails();
 
-    await waitFor(() => {
-      expect(screen.getByText(/constructor not found/i)).toBeInTheDocument();
-    });
+    // Wait for the "not found" message
+    const notFoundMessage = await screen.findByText(/constructor not found/i);
+    expect(notFoundMessage).toBeInTheDocument();
   });
 });
