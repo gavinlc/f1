@@ -4,7 +4,9 @@ import { Home } from './pages/Home';
 import { Circuits } from './pages/Circuits';
 import { CircuitDetails } from './pages/CircuitDetails';
 import { Drivers } from './pages/Drivers';
+import { DriverDetails } from './pages/DriverDetails';
 import { Constructors } from './pages/Constructors';
+import { ConstructorDetails } from './pages/ConstructorDetails';
 import { Results } from './pages/Results';
 import { About } from './pages/About';
 import { RouterErrorBoundary } from './components/RouterErrorBoundary';
@@ -38,10 +40,22 @@ const driversRoute = createRoute({
   component: Drivers,
 });
 
+const driverDetailsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/drivers/$driverId',
+  component: DriverDetails,
+});
+
 const constructorsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/constructors',
   component: Constructors,
+});
+
+const constructorDetailsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/constructors/$constructorId',
+  component: ConstructorDetails,
 });
 
 const resultsRoute = createRoute({
@@ -61,7 +75,9 @@ const routeTree = rootRoute.addChildren([
   circuitsRoute,
   circuitDetailsRoute,
   driversRoute,
+  driverDetailsRoute,
   constructorsRoute,
+  constructorDetailsRoute,
   resultsRoute,
   aboutRoute,
 ]);

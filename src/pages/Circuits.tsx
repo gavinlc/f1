@@ -14,11 +14,14 @@ import { Skeleton } from '../components/ui/skeleton';
 import { Page } from '../components/Page';
 
 export function Circuits() {
-  const setTitle = useStore(pageTitleStore, (state) => state.setTitle);
+  const setDetailsPageTitle = useStore(
+    pageTitleStore,
+    (state) => state.setDetailsPageTitle,
+  );
 
   useEffect(() => {
-    setTitle('');
-  }, [setTitle]);
+    setDetailsPageTitle('');
+  }, [setDetailsPageTitle]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['circuits', '2025'],

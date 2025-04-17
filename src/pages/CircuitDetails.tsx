@@ -18,7 +18,10 @@ import { pageTitleStore } from '../stores/pageTitleStore';
 
 export function CircuitDetails() {
   const { circuitId } = useParams({ from: '/circuits/$circuitId' });
-  const setTitle = useStore(pageTitleStore, (state) => state.setTitle);
+  const setDetailsPageTitle = useStore(
+    pageTitleStore,
+    (state) => state.setDetailsPageTitle,
+  );
 
   const { data, isLoading } = useQuery({
     queryKey: ['circuit', circuitId],
@@ -27,9 +30,9 @@ export function CircuitDetails() {
 
   useEffect(() => {
     if (data?.MRData.CircuitTable.Circuits[0]) {
-      setTitle(data.MRData.CircuitTable.Circuits[0].circuitName);
+      setDetailsPageTitle(data.MRData.CircuitTable.Circuits[0].circuitName);
     }
-  }, [data, setTitle]);
+  }, [data, setDetailsPageTitle]);
 
   if (isLoading) {
     return (

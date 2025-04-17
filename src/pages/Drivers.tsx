@@ -9,11 +9,14 @@ import { Page } from '../components/Page';
 import { DriverCard } from '../components/DriverCard';
 
 export function Drivers() {
-  const setTitle = useStore(pageTitleStore, (state) => state.setTitle);
+  const setDetailsPageTitle = useStore(
+    pageTitleStore,
+    (state) => state.setDetailsPageTitle,
+  );
 
   useEffect(() => {
-    setTitle('');
-  }, [setTitle]);
+    setDetailsPageTitle('');
+  }, [setDetailsPageTitle]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['drivers', '2025'],
@@ -50,7 +53,13 @@ export function Drivers() {
     <Page>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {drivers.map((driver) => (
-          <DriverCard key={driver.driverId} driver={driver} />
+          <Link
+            key={driver.driverId}
+            to="/drivers/$driverId"
+            params={{ driverId: driver.driverId }}
+          >
+            <DriverCard driver={driver} />
+          </Link>
         ))}
       </div>
     </Page>

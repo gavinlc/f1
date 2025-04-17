@@ -14,11 +14,14 @@ import { Skeleton } from '../components/ui/skeleton';
 import { Page } from '../components/Page';
 
 export function Races() {
-  const setTitle = useStore(pageTitleStore, (state) => state.setTitle);
+  const setDetailsPageTitle = useStore(
+    pageTitleStore,
+    (state) => state.setDetailsPageTitle,
+  );
 
   useEffect(() => {
-    setTitle('');
-  }, [setTitle]);
+    setDetailsPageTitle('');
+  }, [setDetailsPageTitle]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['races', '2025'],

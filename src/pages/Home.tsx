@@ -15,11 +15,14 @@ import { Skeleton } from '../components/ui/skeleton';
 import { Page } from '../components/Page';
 
 export function Home() {
-  const setTitle = useStore(pageTitleStore, (state) => state.setTitle);
+  const setDetailsPageTitle = useStore(
+    pageTitleStore,
+    (state) => state.setDetailsPageTitle,
+  );
 
   useEffect(() => {
-    setTitle('');
-  }, [setTitle]);
+    setDetailsPageTitle('');
+  }, [setDetailsPageTitle]);
 
   const {
     data: driverStandingsData,
@@ -95,8 +98,10 @@ export function Home() {
               <StandingsTable
                 title="Driver Standings"
                 standings={
-                  driverStandingsData?.MRData.StandingsTable.StandingsLists[0]
-                    ?.DriverStandings ?? []
+                  driverStandingsData?.MRData.StandingsTable.StandingsLists[0]?.DriverStandings.slice(
+                    0,
+                    10,
+                  ) ?? []
                 }
                 type="driver"
               />

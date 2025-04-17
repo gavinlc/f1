@@ -108,7 +108,7 @@ describe('Drivers', () => {
     });
 
     // Wait for driver data to load
-    const driverName = await screen.findByText('Max Verstappen');
+    const driverName = await screen.findByText('Max Verstappen (VER)');
     expect(driverName).toBeDefined();
 
     // Check driver details

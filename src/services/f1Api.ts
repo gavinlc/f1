@@ -131,4 +131,52 @@ export const f1Api = {
     );
     return response.json();
   },
+
+  getDriver: async (
+    driverId: string,
+  ): Promise<{ MRData: { DriverTable: { Drivers: Array<Driver> } } }> => {
+    const response = await fetch(`${BASE_URL}/drivers/${driverId}.json`);
+    return response.json();
+  },
+
+  getDriverResults: async (
+    driverId: string,
+    season: string,
+  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+    const response = await fetch(
+      `${BASE_URL}/${season}/drivers/${driverId}/results.json`,
+    );
+    return response.json();
+  },
+
+  getConstructor: async (
+    constructorId: string,
+  ): Promise<{
+    MRData: { ConstructorTable: { Constructors: Array<Constructor> } };
+  }> => {
+    const response = await fetch(
+      `${BASE_URL}/constructors/${constructorId}.json`,
+    );
+    return response.json();
+  },
+
+  getConstructorResults: async (
+    constructorId: string,
+    season: string,
+  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+    const response = await fetch(
+      `${BASE_URL}/${season}/constructors/${constructorId}/results.json`,
+    );
+    return response.json();
+  },
+
+  getConstructorDrivers: async (
+    constructorId: string,
+    season: string,
+  ): Promise<{ MRData: { DriverTable: { Drivers: Array<Driver> } } }> => {
+    const response = await fetch(
+      `${BASE_URL}/${season}/constructors/${constructorId}/drivers.json`,
+    );
+    return response.json();
+  },
 };

@@ -16,12 +16,21 @@ export function Header() {
   const matches = useMatches();
   const currentRoute = matches[matches.length - 1];
   const pathname = currentRoute?.pathname || '';
-  const pageTitle = useStore(pageTitleStore, (state) => state.title);
+  const detailsPageTitle = useStore(
+    pageTitleStore,
+    (state) => state.detailsPageTitle,
+  );
 
   // Get the base route name (e.g., "Circuits" from "/circuits")
   const baseRouteName =
     pathname.split('/')[1]?.charAt(0).toUpperCase() +
       pathname.split('/')[1]?.slice(1) || '';
+
+  // Check if we're on a detail page
+  const isDetailPage = pathname.split('/').length > 2;
+
+  // Check if we're on the home page
+  const isHomePage = pathname === '/' || pathname === '';
 
   return (
     <header
@@ -38,23 +47,31 @@ export function Header() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              {isHomePage ? (
+                <BreadcrumbPage>Home</BreadcrumbPage>
+              ) : (
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              )}
             </BreadcrumbItem>
             {baseRouteName && (
               <>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/${baseRouteName.toLowerCase()}`}>
-                    {baseRouteName}
-                  </BreadcrumbLink>
+                  {isDetailPage ? (
+                    <BreadcrumbLink href={`/${baseRouteName.toLowerCase()}`}>
+                      {baseRouteName}
+                    </BreadcrumbLink>
+                  ) : (
+                    <BreadcrumbPage>{baseRouteName}</BreadcrumbPage>
+                  )}
                 </BreadcrumbItem>
               </>
             )}
-            {pageTitle && (
+            {detailsPageTitle && (
               <>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>{pageTitle}</BreadcrumbPage>
+                  <BreadcrumbPage>{detailsPageTitle}</BreadcrumbPage>
                 </BreadcrumbItem>
               </>
             )}

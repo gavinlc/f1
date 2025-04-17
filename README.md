@@ -16,7 +16,7 @@ A modern web application for exploring Formula 1 data, built with React and the 
 
 ### Core Technologies
 
-- **React 19**: Latest version for optimal performance and features
+- **React**: Latest version for optimal performance and features
 - **TypeScript**: For type safety and better developer experience
 - **Vite**: Modern build tool for fast development and optimised production builds
 
@@ -31,13 +31,15 @@ A modern web application for exploring Formula 1 data, built with React and the 
 - **Tailwind CSS**: Utility-first CSS framework for rapid UI development
 - **Shadcn UI**: High-quality, accessible components built on Radix UI
 - **Lucide Icons**: Modern icon set for consistent visual design
+- **Leaflet & React Leaflet**: For interactive circuit maps and location visualisation
 
 ### Development Tools
 
 - **ESLint**: For code linting with TanStack's recommended configuration
 - **Prettier**: For consistent code formatting
-- **Vitest**: For unit testing
+- **Vitest**: For unit testing with React Testing Library integration
 - **TypeScript**: For static type checking
+- **Testing Libraries**: Jest DOM, React Testing Library, and User Event for comprehensive testing
 
 ## Architecture
 
@@ -46,11 +48,20 @@ A modern web application for exploring Formula 1 data, built with React and the 
 ```
 src/
 ├── components/     # Reusable UI components
-├── pages/         # Route components
+│   ├── ui/        # Shadcn UI components
+│   └── *.tsx      # Application-specific components
+├── pages/         # Route components and their tests
 ├── services/      # API and data services
+├── stores/        # TanStack Store state management
 ├── types/         # TypeScript type definitions
-├── styles/        # Global styles and theme
-└── lib/          # Utility functions and helpers
+├── utils/         # Utility functions and helpers
+├── hooks/         # Custom React hooks
+├── lib/          # Third-party library configurations
+├── test/         # Test utilities and setup
+├── styles.css    # Global styles and theme
+├── router.tsx    # Application routing configuration
+├── Layout.tsx    # Main application layout
+└── App.tsx       # Application entry point
 ```
 
 ### Key Architectural Decisions
@@ -102,9 +113,10 @@ src/
 
 ### Available Scripts
 
-- `yarn start`: Start development server
-- `yarn build`: Build for production
-- `yarn test`: Run tests
+- `yarn start`: Start development server (runs on port 3000)
+- `yarn build`: Build for production and type check
+- `yarn serve`: Preview production build
+- `yarn test`: Run Vitest tests
 - `yarn lint`: Run ESLint
 - `yarn format`: Format code with Prettier
 - `yarn check`: Run both linting and formatting
@@ -142,6 +154,7 @@ npx shadcn@latest add [component-name]
    - Implement React Suspense for better loading states
    - Add service worker for offline support
    - Optimise bundle size with code splitting
+   - Implement circuit map caching for better performance
 
 2. **Feature Additions**
 
@@ -149,13 +162,15 @@ npx shadcn@latest add [component-name]
    - Historical data & comparisons
    - Driver statistics and analytics
    - User preferences and favourites
+   - Enhanced circuit maps with more interactive features
 
 3. **Technical Debt**
    - Some components might benefit from further decomposition (particularly the Results page)
-   - Add comprehensive test coverage
+   - Expand test coverage with more integration tests
    - Implement E2E testing with Cypress or Playwright
    - Add performance monitoring
    - Improve accessibility compliance
+   - Add more comprehensive error boundaries
 
 ## Contributing
 

@@ -1,7 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { CountryFlag } from './CountryFlag';
 import { useAge } from '../hooks/useAge';
-import type { Driver } from '../types/f1';
+import { CountryFlag } from './CountryFlag';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
+
+import type { Driver } from '@/types/f1';
 
 interface DriverCardProps {
   driver: Driver;
@@ -11,23 +18,19 @@ export function DriverCard({ driver }: DriverCardProps) {
   const age = useAge(driver.dateOfBirth);
 
   return (
-    <Card key={driver.driverId}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CountryFlag nationality={driver.nationality} className="w-6 h-4" />
-          {driver.givenName} {driver.familyName}
-        </CardTitle>
+    <Card className="h-full">
+      <CardHeader className="pb-2">
+        <div className="flex items-center gap-2">
+          <CountryFlag nationality={driver.nationality} className="w-5 h-4" />
+          <CardTitle className="text-lg">
+            {`${driver.givenName} ${driver.familyName} (${driver.code})`}
+          </CardTitle>
+        </div>
+        <CardDescription>Driver #{driver.permanentNumber}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-1 text-muted-foreground">
-          <p>
-            <span className="font-medium">Number:</span>{' '}
-            {driver.permanentNumber || 'N/A'}
-          </p>
-          <p>
-            <span className="font-medium">Code:</span> {driver.code || 'N/A'}
-          </p>
-          <p>
+      <CardContent className="pb-4 pt-0">
+        <div className="text-sm text-muted-foreground">
+          <p data-testid="nationality">
             <span className="font-medium">Nationality:</span>{' '}
             {driver.nationality}
           </p>

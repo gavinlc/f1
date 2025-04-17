@@ -15,11 +15,14 @@ import { Page } from '../components/Page';
 import { CountryFlag } from '../components/CountryFlag';
 
 export function Constructors() {
-  const setTitle = useStore(pageTitleStore, (state) => state.setTitle);
+  const setDetailsPageTitle = useStore(
+    pageTitleStore,
+    (state) => state.setDetailsPageTitle,
+  );
 
   useEffect(() => {
-    setTitle('');
-  }, [setTitle]);
+    setDetailsPageTitle('');
+  }, [setDetailsPageTitle]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['constructors', '2025'],
@@ -57,25 +60,31 @@ export function Constructors() {
     <Page>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {constructors.map((constructor) => (
-          <Card key={constructor.constructorId}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CountryFlag
-                  nationality={constructor.nationality}
-                  className="w-6 h-4"
-                />
-                {constructor.name}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-1 text-muted-foreground">
-                <p>
-                  <span className="font-medium">Nationality:</span>{' '}
-                  {constructor.nationality}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <Link
+            key={constructor.constructorId}
+            to="/constructors/$constructorId"
+            params={{ constructorId: constructor.constructorId }}
+          >
+            <Card className="hover:bg-accent transition-colors">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CountryFlag
+                    nationality={constructor.nationality}
+                    className="w-6 h-4"
+                  />
+                  {constructor.name}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-1 text-muted-foreground">
+                  <p>
+                    <span className="font-medium">Nationality:</span>{' '}
+                    {constructor.nationality}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </Page>

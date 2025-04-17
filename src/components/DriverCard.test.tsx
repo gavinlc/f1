@@ -1,76 +1,57 @@
-import { describe, expect, test, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { render, screen, within } from '@testing-library/react';
 import { DriverCard } from './DriverCard';
 import type { Driver } from '../types/f1';
-
-// Mock the useAge hook
-vi.mock('../hooks/useAge', () => ({
-  useAge: () => 26,
-}));
 
 // Mock the CountryFlag component
 vi.mock('./CountryFlag', () => ({
   CountryFlag: ({ nationality }: { nationality: string }) => (
-    <div data-testid={`flag-${nationality}`}>Flag: {nationality}</div>
+    <div data-testid="country-flag">{nationality}</div>
   ),
 }));
 
+// Mock the useAge hook
+vi.mock('../hooks/useAge', () => ({
+  useAge: () => 39,
+}));
+
 describe('DriverCard', () => {
-  const mockDriver: Driver = {
-    driverId: 'max_verstappen',
-    permanentNumber: '1',
-    code: 'VER',
-    url: 'http://example.com/verstappen',
-    givenName: 'Max',
-    familyName: 'Verstappen',
-    dateOfBirth: '1997-09-30',
-    nationality: 'Dutch',
+  const mockDriver = {
+    driverId: 'hamilton',
+    givenName: 'Lewis',
+    familyName: 'Hamilton',
+    permanentNumber: '44',
+    nationality: 'British',
+    dateOfBirth: '1985-01-07',
+    url: 'http://example.com/hamilton',
+    code: 'HAM',
   };
 
-  test('renders driver information correctly', () => {
+  it('renders driver information correctly', () => {
     render(<DriverCard driver={mockDriver} />);
 
     // Check driver name
-    expect(screen.getByText('Max Verstappen')).toBeDefined();
+    expect(screen.getByText('Lewis Hamilton (HAM)')).toBeDefined();
 
-    // Check driver details
-    expect(screen.getByText('1')).toBeDefined();
-    expect(screen.getByText('VER')).toBeDefined();
-    expect(screen.getByText('Dutch')).toBeDefined();
-    expect(screen.getByText('26')).toBeDefined();
+    // Check driver number
+    expect(screen.getByText('Driver #44')).toBeDefined();
 
-    // Check flag is rendered
-    expect(screen.getByTestId('flag-Dutch')).toBeDefined();
+    // Check nationality
+    const nationalityElem = screen.getByTestId('nationality');
+    expect(within(nationalityElem).getByText('British')).toBeDefined();
+
+    // Check age
+    expect(screen.getByText('39')).toBeDefined();
+
+    // Check country flag is rendered
+    expect(screen.getByTestId('country-flag')).toBeDefined();
+    expect(screen.getByTestId('country-flag')).toHaveTextContent('British');
   });
 
-  test('handles missing permanent number', () => {
-    const driverWithoutNumber: Driver = {
-      ...mockDriver,
-      permanentNumber: undefined,
-    };
-
-    render(<DriverCard driver={driverWithoutNumber} />);
-
-    expect(screen.getByText('N/A')).toBeDefined();
-  });
-
-  test('handles missing driver code', () => {
-    const driverWithoutCode: Driver = {
-      ...mockDriver,
-      code: undefined,
-    };
-
-    render(<DriverCard driver={driverWithoutCode} />);
-
-    expect(screen.getByText('N/A')).toBeDefined();
-  });
-
-  test('renders all required fields', () => {
+  it('renders all required fields', () => {
     render(<DriverCard driver={mockDriver} />);
 
     // Check all field labels are present
-    expect(screen.getByText('Number:')).toBeDefined();
-    expect(screen.getByText('Code:')).toBeDefined();
     expect(screen.getByText('Nationality:')).toBeDefined();
     expect(screen.getByText('Age:')).toBeDefined();
   });
