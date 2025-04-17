@@ -16,10 +16,10 @@ import {
 
 const menuItems = [
   { icon: Home, label: 'Home', path: '/' },
-  { icon: CircuitBoard, label: 'Circuits', path: '/circuits' },
+  { icon: Flag, label: 'Results', path: '/results' },
   { icon: Users, label: 'Drivers', path: '/drivers' },
   { icon: Trophy, label: 'Constructors', path: '/constructors' },
-  { icon: Flag, label: 'Results', path: '/results' },
+  { icon: CircuitBoard, label: 'Circuits', path: '/circuits' },
 ];
 
 const secondaryMenuItems = [{ icon: Info, label: 'About', path: '/about' }];

@@ -15,6 +15,7 @@ import { CircuitInfo } from '../components/CircuitInfo';
 import { Skeleton } from '../components/ui/skeleton';
 import { Page } from '../components/Page';
 import { pageTitleStore } from '../stores/pageTitleStore';
+import { CountryFlag } from '../components/CountryFlag';
 
 export function CircuitDetails() {
   const { circuitId } = useParams({ from: '/circuits/$circuitId' });

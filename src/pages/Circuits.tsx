@@ -12,6 +12,7 @@ import {
 } from '../components/ui/card';
 import { Skeleton } from '../components/ui/skeleton';
 import { Page } from '../components/Page';
+import { CountryFlag } from '../components/CountryFlag';
 
 export function Circuits() {
   const setDetailsPageTitle = useStore(
@@ -73,7 +74,13 @@ export function Circuits() {
           >
             <Card>
               <CardHeader>
-                <CardTitle>{circuit.circuitName}</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <CountryFlag
+                    nationality={circuit.Location.country}
+                    className="w-6 h-4"
+                  />
+                  {circuit.circuitName}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-1 text-muted-foreground">

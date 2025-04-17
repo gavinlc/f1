@@ -48,11 +48,7 @@ export function Home() {
       description: 'View race results and standings for the 2025 season',
       path: '/results',
     },
-    {
-      title: '2025 Circuits',
-      description: 'Browse Formula 1 circuits used in the 2025 season',
-      path: '/circuits',
-    },
+
     {
       title: '2025 Drivers',
       description: 'View current Formula 1 drivers and their information',
@@ -62,6 +58,11 @@ export function Home() {
       title: '2025 Constructors',
       description: 'Explore Formula 1 teams and their details',
       path: '/constructors',
+    },
+    {
+      title: '2025 Circuits',
+      description: 'Browse Formula 1 circuits used in the 2025 season',
+      path: '/circuits',
     },
   ];
 
