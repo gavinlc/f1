@@ -127,16 +127,25 @@ const mockRaces = {
           round: '1',
           raceName: 'Bahrain Grand Prix',
           date: '2025-03-02',
+          Circuit: {
+            circuitId: 'bahrain',
+          },
         },
         {
           round: '2',
           raceName: 'Saudi Arabian Grand Prix',
           date: '2025-03-09',
+          Circuit: {
+            circuitId: 'jeddah',
+          },
         },
         {
           round: '3',
           raceName: 'Australian Grand Prix',
           date: '2025-03-23',
+          Circuit: {
+            circuitId: 'albert_park',
+          },
         },
       ],
     },
@@ -196,6 +205,7 @@ describe('DriverDetails', () => {
     });
 
     // Check if the driver details are rendered
+    console.log(screen);
     expect(screen.getByText('Lewis Hamilton (HAM)')).toBeInTheDocument();
     expect(screen.getByText('Driver #44')).toBeInTheDocument();
     expect(screen.getByText('British')).toBeInTheDocument();

@@ -69,7 +69,13 @@ export function RaceResultsTable({
                 <React.Fragment key={`${race.round}-container`}>
                   <TableRow key={`${race.round}-race`}>
                     <TableCell className="font-medium">
-                      {race.raceName}
+                      <Link
+                        to="/circuits/$circuitId"
+                        params={{ circuitId: race.Circuit.circuitId }}
+                        className="hover:underline"
+                      >
+                        {race.raceName}
+                      </Link>
                     </TableCell>
                     <TableCell>
                       {new Date(race.date).toLocaleDateString()}
@@ -186,7 +192,13 @@ export function RaceResultsTable({
             return (
               <TableRow key={race.round}>
                 <TableCell className="sticky left-0 bg-background font-medium">
-                  {race.raceName}
+                  <Link
+                    to="/circuits/$circuitId"
+                    params={{ circuitId: race.Circuit.circuitId }}
+                    className="hover:underline"
+                  >
+                    {race.raceName}
+                  </Link>
                 </TableCell>
                 <TableCell>
                   {new Date(race.date).toLocaleDateString()}

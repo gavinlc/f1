@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { ResultsTable } from './ResultsTable';
@@ -45,7 +46,13 @@ export function RaceCard({
             </p>
             <p>
               <span className="font-medium">Circuit:</span>{' '}
-              {race.Circuit.circuitName}
+              <Link
+                to="/circuits/$circuitId"
+                params={{ circuitId: race.Circuit.circuitId }}
+                className="hover:underline"
+              >
+                {race.Circuit.circuitName}
+              </Link>
             </p>
           </div>
 
