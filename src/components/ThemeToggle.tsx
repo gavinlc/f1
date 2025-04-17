@@ -1,11 +1,11 @@
-import { useStore } from '@tanstack/react-store'
-import { Moon, Sun } from 'lucide-react'
-import { themeStore } from '../stores/themeStore'
-import { Button } from './ui/button'
+import { useStore } from '@tanstack/react-store';
+import { Moon, Sun } from 'lucide-react';
+import { themeStore } from '../stores/themeStore';
+import { Button } from './ui/button';
 
 export function ThemeToggle() {
-  const theme = useStore(themeStore, (state) => state.theme)
-  const toggleTheme = useStore(themeStore, (state) => state.toggleTheme)
+  const theme = useStore(themeStore, (state) => state.theme);
+  const toggleTheme = useStore(themeStore, (state) => state.toggleTheme);
 
   return (
     <Button
@@ -21,5 +21,5 @@ export function ThemeToggle() {
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>
-  )
+  );
 }
