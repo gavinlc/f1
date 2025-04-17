@@ -19,7 +19,7 @@ describe('Layout', () => {
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
     });
-    expect(screen.getByRole('banner')).toBeDefined();
+    expect(screen.getByTestId('app-header')).toBeDefined();
   });
 
   test('renders main content', async () => {

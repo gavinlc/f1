@@ -1,51 +1,41 @@
-import { describe, expect, test } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
-import { RouterProvider } from '@tanstack/react-router';
+import { describe, expect, test, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import { axe } from 'vitest-axe';
-import { router } from '../router';
+import { Header } from './Header';
+
+// Mock the router hooks
+vi.mock('@tanstack/react-router', () => ({
+  useMatches: () => [{ pathname: '/' }],
+  Link: ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
+// Mock the store
+vi.mock('@tanstack/react-store', () => ({
+  useStore: () => '',
+}));
+
+// Mock the sidebar trigger
+vi.mock('./ui/sidebar', () => ({
+  SidebarTrigger: () => <button>Toggle Sidebar</button>,
+}));
 
 describe('Header', () => {
-  test('renders header with title', async () => {
-    await act(async () => {
-      render(<RouterProvider router={router} />);
-    });
-    expect(screen.getByText('F1 2025 Browser')).toBeDefined();
+  test('renders header with home breadcrumb', () => {
+    render(<Header />);
+    const homeLink = screen.getByRole('link', { name: 'Home' });
+    expect(homeLink).toBeDefined();
   });
 
-  test('renders all navigation links', async () => {
-    await act(async () => {
-      render(<RouterProvider router={router} />);
-    });
-
-    const expectedLinks = ['Circuits', 'Drivers', 'Constructors', 'Results'];
-    expectedLinks.forEach((linkText) => {
-      expect(screen.getByRole('link', { name: linkText })).toBeDefined();
-    });
-  });
-
-  test('navigation links have correct hrefs', async () => {
-    await act(async () => {
-      render(<RouterProvider router={router} />);
-    });
-
-    const links = {
-      Circuits: '/circuits',
-      Drivers: '/drivers',
-      Constructors: '/constructors',
-      Results: '/results',
-    };
-
-    Object.entries(links).forEach(([text, href]) => {
-      const link = screen.getByRole('link', { name: text });
-      expect(link.getAttribute('href')).toBe(href);
-    });
+  test('breadcrumb links have correct hrefs', () => {
+    render(<Header />);
+    const homeLink = screen.getByRole('link', { name: 'Home' });
+    expect(homeLink.getAttribute('href')).toBe('/');
   });
 
   test('should have no accessibility violations', async () => {
-    const { container } = render(<RouterProvider router={router} />);
-    await act(async () => {
-      // Wait for any state updates to complete
-    });
+    const { container } = render(<Header />);
     const results = await axe(container);
     expect(results.violations).toHaveLength(0);
   });

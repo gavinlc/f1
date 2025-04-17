@@ -23,6 +23,14 @@ export function RaceCard({
 }: RaceCardProps) {
   const hasSprintResults = Boolean(sprintResults?.length);
 
+  const handleSprintRaceToggle = (value: string) => {
+    if (value === 'sprint' && !showSprint) {
+      onSprintToggle(true);
+    } else if (value === 'race' && showSprint) {
+      onSprintToggle(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -44,7 +52,8 @@ export function RaceCard({
           {hasSprintResults && (
             <Tabs
               defaultValue={showSprint ? 'sprint' : 'race'}
-              onValueChange={(value) => onSprintToggle(value === 'sprint')}
+              value={showSprint ? 'sprint' : 'race'}
+              onValueChange={handleSprintRaceToggle}
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-2">
@@ -54,12 +63,24 @@ export function RaceCard({
               <TabsContent value="sprint">
                 {isLoading ? (
                   <div className="space-y-4">
-                    <Skeleton className="h-6 w-32" />
+                    <Skeleton className="h-6 w-32" data-testid="skeleton" />
                     <div className="space-y-2">
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
                     </div>
                   </div>
                 ) : (
@@ -73,12 +94,24 @@ export function RaceCard({
               <TabsContent value="race">
                 {isLoading ? (
                   <div className="space-y-4">
-                    <Skeleton className="h-6 w-32" />
+                    <Skeleton className="h-6 w-32" data-testid="skeleton" />
                     <div className="space-y-2">
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
+                      <Skeleton
+                        className="h-10 w-full"
+                        data-testid="skeleton"
+                      />
                     </div>
                   </div>
                 ) : (
@@ -96,20 +129,32 @@ export function RaceCard({
             <div className="space-y-8">
               {isLoading ? (
                 <div className="space-y-4">
-                  <Skeleton className="h-6 w-32" />
+                  <Skeleton className="h-6 w-32" data-testid="skeleton" />
                   <div className="space-y-2">
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" data-testid="skeleton" />
+                    <Skeleton className="h-10 w-full" data-testid="skeleton" />
+                    <Skeleton className="h-10 w-full" data-testid="skeleton" />
+                    <Skeleton className="h-10 w-full" data-testid="skeleton" />
                   </div>
                 </div>
               ) : (
-                <ResultsTable
-                  results={raceResults || []}
-                  title="Grand Prix Results"
-                  raceDate={race.date}
-                />
+                <div data-testid="results-table">
+                  {!raceResults || raceResults.length === 0 ? (
+                    <div className="p-4 text-center bg-muted rounded-md">
+                      <p className="text-muted-foreground">
+                        No results available for this race.
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <ResultsTable
+                        results={raceResults}
+                        title="Grand Prix Results"
+                        raceDate={race.date}
+                      />
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           )}

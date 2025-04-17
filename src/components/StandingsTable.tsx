@@ -22,8 +22,10 @@ export function StandingsTable({
 }: StandingsTableProps) {
   if (standings.length === 0) {
     return (
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">{title}</h3>
+      <div className="space-y-4" aria-label={title}>
+        <h3 className="text-lg font-semibold" data-testid="standings-title">
+          {title}
+        </h3>
         <div className="p-4 border rounded-lg">
           <p className="text-muted-foreground">No standings data available</p>
         </div>
@@ -32,8 +34,10 @@ export function StandingsTable({
   }
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">{title}</h3>
+    <div className="space-y-4" aria-label={title}>
+      <h3 className="text-lg font-semibold" data-testid="standings-title">
+        {title}
+      </h3>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>

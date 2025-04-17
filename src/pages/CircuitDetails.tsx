@@ -35,6 +35,7 @@ export function CircuitDetails() {
     return (
       <Page>
         <div className="space-y-6">
+          <h1 className="text-3xl font-bold">Loading...</h1>
           <div className="flex items-center justify-between">
             <Skeleton className="h-10 w-64" />
             <Skeleton className="h-10 w-32" />

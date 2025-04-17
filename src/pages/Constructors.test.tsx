@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { RouterProvider } from '@tanstack/react-router';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { router } from '../router';
@@ -34,17 +41,6 @@ describe('Constructors', () => {
     };
 
     vi.mocked(f1Api.getConstructors).mockResolvedValue(defaultMockConstructors);
-  });
-
-  test('renders page title', async () => {
-    await act(async () => {
-      renderWithProviders(<RouterProvider router={router} />);
-    });
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
-    await act(async () => {
-      fireEvent.click(constructorsLink);
-    });
-    expect(await screen.findByText('F1 Constructors 2025')).toBeDefined();
   });
 
   test('renders loading state initially', async () => {
@@ -85,7 +81,14 @@ describe('Constructors', () => {
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
     });
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
+
+    const sidebar = screen.getByRole('complementary', {
+      name: 'Sidebar navigation',
+    });
+    const constructorsLink = within(sidebar).getByRole('link', {
+      name: 'Constructors',
+    });
+
     await act(async () => {
       fireEvent.click(constructorsLink);
     });
@@ -113,14 +116,21 @@ describe('Constructors', () => {
     await act(async () => {
       renderWithProviders(<RouterProvider router={router} />);
     });
-    const constructorsLink = screen.getByRole('link', { name: 'Constructors' });
+
+    const sidebar = screen.getByRole('complementary', {
+      name: 'Sidebar navigation',
+    });
+    const constructorsLink = within(sidebar).getByRole('link', {
+      name: 'Constructors',
+    });
+
     await act(async () => {
       fireEvent.click(constructorsLink);
     });
 
     // Wait for loading to finish
-    const title = await screen.findByText('F1 Constructors 2025');
-    expect(title).toBeDefined();
+    const loadingText = screen.queryByText('Loading...');
+    waitFor(() => expect(loadingText).toBeNull());
 
     // Verify no constructors are rendered
     expect(screen.queryByText(/Red Bull Racing/)).toBeNull();

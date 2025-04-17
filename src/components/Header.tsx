@@ -1,9 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { Link, useMatches } from '@tanstack/react-router';
+import { useMatches } from '@tanstack/react-router';
 import { useStore } from '@tanstack/react-store';
-import { f1Api } from '../services/f1Api';
 import { pageTitleStore } from '../stores/pageTitleStore';
-import { ThemeToggle } from './ThemeToggle';
 import { SidebarTrigger } from './ui/sidebar';
 import { Separator } from './ui/separator';
 import {
@@ -27,7 +24,11 @@ export function Header() {
       pathname.split('/')[1]?.slice(1) || '';
 
   return (
-    <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear">
+    <header
+      className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear"
+      aria-label="Main navigation"
+      data-testid="app-header"
+    >
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator
@@ -59,9 +60,6 @@ export function Header() {
             )}
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="ml-auto flex items-center gap-4">
-          <ThemeToggle />
-        </div>
       </div>
     </header>
   );

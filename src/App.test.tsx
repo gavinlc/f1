@@ -7,6 +7,6 @@ describe('App', () => {
     await act(async () => {
       render(<App />);
     });
-    expect(screen.getByText('Welcome to F1 2025 Browser')).toBeDefined();
+    expect(screen.getByText('Welcome to F1 Browser')).toBeDefined();
   });
 });

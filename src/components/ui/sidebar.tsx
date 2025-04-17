@@ -246,6 +246,8 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
+          role="complementary"
+          aria-label="Sidebar navigation"
           className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
         >
           {children}
@@ -306,9 +308,9 @@ function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
   );
 }
 
-function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
+function SidebarInset({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <main
+    <div
       data-slot="sidebar-inset"
       className={cn(
         'bg-background relative flex w-full flex-1 flex-col',
@@ -504,10 +506,12 @@ function SidebarMenuButton({
   size = 'default',
   tooltip,
   className,
+  href,
   ...props
 }: React.ComponentProps<'button'> & {
   asChild?: boolean;
   isActive?: boolean;
+  href?: string;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot : 'button';
@@ -519,6 +523,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
+      data-testid={`sidebar-${href?.replace('/', '') || 'button'}`}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
     />

@@ -12,7 +12,11 @@ export function Results() {
   const [showSprint, setShowSprint] = useState<boolean>(false);
 
   // Query for basic race information
-  const { data: racesData, isLoading: isLoadingRaces } = useQuery({
+  const {
+    data: racesData,
+    isLoading: isLoadingRaces,
+    error: racesError,
+  } = useQuery({
     queryKey: ['races', '2025'],
     queryFn: () => f1Api.getRaceResults('2025'),
   });
@@ -35,7 +39,7 @@ export function Results() {
     return (
       <Page>
         <div className="space-y-6">
-          <Skeleton className="h-10 w-48" />
+          <h1 className="text-3xl font-bold">Loading...</h1>
           <div className="space-y-4">
             <Skeleton className="h-10 w-full" />
             <div className="space-y-4">
@@ -43,6 +47,17 @@ export function Results() {
               <Skeleton className="h-[300px] w-full" />
             </div>
           </div>
+        </div>
+      </Page>
+    );
+  }
+
+  if (racesError) {
+    return (
+      <Page>
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold">2025 F1 Race Results</h1>
+          <p className="text-destructive">Error loading race results</p>
         </div>
       </Page>
     );

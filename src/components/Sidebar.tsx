@@ -30,12 +30,13 @@ export function Sidebar() {
   // Update active path when location changes
 
   useEffect(() => {
-    setActivePath(location.pathname);
+    const pathSections = location.pathname.split('/').slice(1);
+    setActivePath('/' + pathSections[0]);
   }, [location]);
 
   return (
     <ShadcnSidebar variant="inset">
-      <SidebarHeader className="flex flex-row justify-between items-center border-b px-4">
+      <SidebarHeader className="flex flex-row justify-between items-center border-b py-1.5">
         <h1 className="text-lg font-semibold">F1 Stats</h1>
         <ThemeToggle />
       </SidebarHeader>

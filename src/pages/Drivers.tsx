@@ -24,7 +24,8 @@ export function Drivers() {
     return (
       <Page>
         <div className="space-y-6">
-          <Skeleton className="h-10 w-48" />
+          <h1>Loading...</h1>
+          <Skeleton className="h-10 w-48" data-testid="skeleton" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, index) => (
               <div key={index} className="border rounded-lg p-4">

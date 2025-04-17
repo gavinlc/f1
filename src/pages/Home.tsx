@@ -65,60 +65,76 @@ export function Home() {
   return (
     <Page>
       <header className="mb-6">
-        <h1 className="text-3xl font-bold">Welcome to F1 2025 Browser</h1>
+        <h1 className="text-3xl font-bold">Welcome to F1 Browser</h1>
         <p className="text-muted-foreground">
           Explore Formula 1 data from the Ergast API. Browse through circuits,
           drivers, constructors, and race results.
         </p>
       </header>
-      <main className="flex flex-col gap-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {isLoadingDriverStandings ? (
-            <div className="space-y-4">
-              <Skeleton className="h-6 w-32" />
-              <Skeleton className="h-[200px] w-full" />
-            </div>
-          ) : driverStandingsError ? (
-            <div className="p-4 border border-destructive rounded-lg">
-              <p className="text-destructive">
-                Failed to load driver standings
-              </p>
-            </div>
-          ) : (
-            <StandingsTable
-              title="Driver Standings"
-              standings={
-                driverStandingsData?.MRData.StandingsTable.StandingsLists[0]
-                  ?.DriverStandings ?? []
-              }
-              type="driver"
-            />
-          )}
+      <div className="flex flex-col gap-6">
+        <section
+          aria-labelledby="standings-heading"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        >
+          <h2 id="standings-heading" className="sr-only">
+            Current Standings
+          </h2>
+          <div>
+            {isLoadingDriverStandings ? (
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-32" data-testid="skeleton" />
+                <Skeleton className="h-[200px] w-full" data-testid="skeleton" />
+              </div>
+            ) : driverStandingsError ? (
+              <div className="p-4 border border-destructive rounded-lg">
+                <p className="text-destructive">
+                  Failed to load driver standings
+                </p>
+              </div>
+            ) : (
+              <StandingsTable
+                title="Driver Standings"
+                standings={
+                  driverStandingsData?.MRData.StandingsTable.StandingsLists[0]
+                    ?.DriverStandings ?? []
+                }
+                type="driver"
+              />
+            )}
+          </div>
 
-          {isLoadingConstructorStandings ? (
-            <div className="space-y-4">
-              <Skeleton className="h-6 w-40" />
-              <Skeleton className="h-[200px] w-full" />
-            </div>
-          ) : constructorStandingsError ? (
-            <div className="p-4 border border-destructive rounded-lg">
-              <p className="text-destructive">
-                Failed to load constructor standings
-              </p>
-            </div>
-          ) : (
-            <StandingsTable
-              title="Constructor Standings"
-              standings={
-                constructorStandingsData?.MRData.StandingsTable
-                  .StandingsLists[0]?.ConstructorStandings ?? []
-              }
-              type="constructor"
-            />
-          )}
-        </div>
+          <div>
+            {isLoadingConstructorStandings ? (
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-40" data-testid="skeleton" />
+                <Skeleton className="h-[200px] w-full" data-testid="skeleton" />
+              </div>
+            ) : constructorStandingsError ? (
+              <div className="p-4 border border-destructive rounded-lg">
+                <p className="text-destructive">
+                  Failed to load constructor standings
+                </p>
+              </div>
+            ) : (
+              <StandingsTable
+                title="Constructor Standings"
+                standings={
+                  constructorStandingsData?.MRData.StandingsTable
+                    .StandingsLists[0]?.ConstructorStandings ?? []
+                }
+                type="constructor"
+              />
+            )}
+          </div>
+        </section>
 
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <section
+          aria-labelledby="navigation-heading"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          <h2 id="navigation-heading" className="sr-only">
+            Quick Navigation
+          </h2>
           {sections.map((section) => (
             <Link key={section.path} to={section.path}>
               <Card className="h-full transition-all duration-200 hover:bg-accent hover:scale-[1.02] hover:shadow-md">
@@ -135,8 +151,8 @@ export function Home() {
               </Card>
             </Link>
           ))}
-        </div> */}
-      </main>
+        </section>
+      </div>
     </Page>
   );
 }

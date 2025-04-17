@@ -7,6 +7,8 @@ interface PageProps {
 
 export function Page({ children, className = '' }: PageProps) {
   return (
-    <div className={`container mx-auto px-6 ${className}`}>{children}</div>
+    <article className={`container mx-auto px-6 ${className}`}>
+      {children}
+    </article>
   );
 }
