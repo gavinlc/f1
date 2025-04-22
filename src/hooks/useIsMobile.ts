@@ -1,7 +1,17 @@
 import * as React from 'react';
 
+/** Breakpoint in pixels below which the device is considered mobile */
 const MOBILE_BREAKPOINT = 768;
 
+/**
+ * A React hook that determines if the current viewport width is below the mobile breakpoint
+ * @returns A boolean indicating whether the current viewport is mobile-sized
+ * @example
+ * ```tsx
+ * const isMobile = useIsMobile();
+ * return isMobile ? <MobileView /> : <DesktopView />;
+ * ```
+ */
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(
     undefined,

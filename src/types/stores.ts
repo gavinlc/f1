@@ -14,3 +14,12 @@ export interface ThemeState {
   /** Function to set a specific theme */
   setTheme: (theme: Theme) => void;
 }
+
+/**
+ * Details page title store state interface
+ */
+
+export interface DetailsPageTitleState {
+  detailsPageTitle: string;
+  setDetailsPageTitle: (title: string) => void;
+}

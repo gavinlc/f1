@@ -1,5 +1,72 @@
-export interface F1ApiResponse {
+export interface F1ApiInfoResponse {
   [key: string]: string;
+}
+
+export interface F1ApiResponse<T> {
+  MRData: T;
+}
+
+export interface MRData {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+}
+
+export interface SeasonsResponseMRData extends MRData {
+  SeasonTable: {
+    Seasons: Array<Season>;
+  };
+}
+
+export interface CircuitsResponseMRData extends MRData {
+  CircuitTable: {
+    Circuits: Array<Circuit>;
+  };
+}
+
+export interface RacesResponseMRData extends MRData {
+  RaceTable: {
+    Races: Array<Race>;
+  };
+}
+
+export interface DriversResponseMRData extends MRData {
+  DriverTable: {
+    Drivers: Array<Driver>;
+  };
+}
+
+export interface ConstructorsResponseMRData extends MRData {
+  ConstructorTable: {
+    Constructors: Array<Constructor>;
+  };
+}
+
+export interface DriverStandingsResponseMRData extends MRData {
+  StandingsTable: {
+    season: string;
+    round: string;
+    StandingsLists: Array<{
+      season: string;
+      round: string;
+      DriverStandings: Array<DriverStanding>;
+    }>;
+  };
+}
+
+export interface ConstructorStandingsResponseMRData extends MRData {
+  StandingsTable: {
+    season: string;
+    round: string;
+    StandingsLists: Array<{
+      season: string;
+      round: string;
+      ConstructorStandings: Array<ConstructorStanding>;
+    }>;
+  };
 }
 
 export interface Season {
@@ -21,8 +88,8 @@ export interface Circuit {
 
 export interface Driver {
   driverId: string;
-  permanentNumber?: string;
-  code?: string;
+  permanentNumber: string;
+  code: string;
   url: string;
   givenName: string;
   familyName: string;
@@ -172,24 +239,4 @@ export interface LapTable {
     time: string;
     Laps: Array<Lap>;
   }>;
-}
-
-export interface MRData {
-  xmlns: string;
-  series: string;
-  url: string;
-  limit: string;
-  offset: string;
-  total: string;
-  RaceTable?: RaceTable;
-  DriverTable?: DriverTable;
-  ConstructorTable?: ConstructorTable;
-  CircuitTable?: CircuitTable;
-  DriverStandingsTable?: DriverStandingsTable;
-  ConstructorStandingsTable?: ConstructorStandingsTable;
-  LapTable?: LapTable;
-}
-
-export interface F1Response {
-  MRData: MRData;
 }

@@ -1,9 +1,5 @@
 import { Store } from '@tanstack/store';
-
-interface DetailsPageTitleState {
-  detailsPageTitle: string;
-  setDetailsPageTitle: (title: string) => void;
-}
+import type { DetailsPageTitleState } from '@/types/stores';
 
 export const pageTitleStore = new Store<DetailsPageTitleState>({
   detailsPageTitle: '',

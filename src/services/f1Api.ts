@@ -1,69 +1,64 @@
 import type {
-  Circuit,
-  Constructor,
-  ConstructorStanding,
-  Driver,
-  DriverStanding,
+  CircuitsResponseMRData,
+  ConstructorStandingsResponseMRData,
+  ConstructorsResponseMRData,
+  DriverStandingsResponseMRData,
+  DriversResponseMRData,
+  F1ApiInfoResponse,
   F1ApiResponse,
-  Race,
-  Season,
+  RacesResponseMRData,
+  SeasonsResponseMRData,
 } from '../types/f1';
 
 const BASE_URL = 'https://api.jolpi.ca/ergast/f1';
 
 export const f1Api = {
-  getApiInfo: async (): Promise<F1ApiResponse> => {
+  getApiInfo: async (): Promise<F1ApiInfoResponse> => {
     const response = await fetch('https://api.jolpi.ca/ergast/?format=json');
     return response.json();
   },
 
-  getSeasons: async (): Promise<{
-    MRData: { SeasonTable: { Seasons: Array<Season> } };
-  }> => {
+  getSeasons: async (): Promise<F1ApiResponse<SeasonsResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/seasons.json`);
     return response.json();
   },
 
-  getCircuits: async (): Promise<{
-    MRData: { CircuitTable: { Circuits: Array<Circuit> } };
-  }> => {
+  getCircuits: async (): Promise<F1ApiResponse<CircuitsResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/circuits.json?limit=100`);
     return response.json();
   },
 
   getCircuitsForSeason: async (
     season: string,
-  ): Promise<{ MRData: { CircuitTable: { Circuits: Array<Circuit> } } }> => {
+  ): Promise<F1ApiResponse<CircuitsResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/${season}/circuits.json`);
     return response.json();
   },
 
   getRaces: async (
     season: string,
-  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+  ): Promise<F1ApiResponse<RacesResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/${season}/races.json`);
     return response.json();
   },
 
   getDrivers: async (
     season: string,
-  ): Promise<{ MRData: { DriverTable: { Drivers: Array<Driver> } } }> => {
+  ): Promise<F1ApiResponse<DriversResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/${season}/drivers.json`);
     return response.json();
   },
 
   getConstructors: async (
     season: string,
-  ): Promise<{
-    MRData: { ConstructorTable: { Constructors: Array<Constructor> } };
-  }> => {
+  ): Promise<F1ApiResponse<ConstructorsResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/${season}/constructors.json`);
     return response.json();
   },
 
   getRaceResults: async (
     season: string,
-  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+  ): Promise<F1ApiResponse<RacesResponseMRData>> => {
     // Only fetch basic race information without results
     const response = await fetch(`${BASE_URL}/${season}/races.json`);
     return response.json();
@@ -72,7 +67,7 @@ export const f1Api = {
   getSingleRaceResult: async (
     season: string,
     round: string,
-  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+  ): Promise<F1ApiResponse<RacesResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/${season}/${round}/results.json`);
     return response.json();
   },
@@ -80,52 +75,28 @@ export const f1Api = {
   getSprintResults: async (
     season: string,
     round: string,
-  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+  ): Promise<F1ApiResponse<RacesResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/${season}/${round}/sprint.json`);
     return response.json();
   },
 
   getCircuit: async (
     circuitId: string,
-  ): Promise<{ MRData: { CircuitTable: { Circuits: Array<Circuit> } } }> => {
+  ): Promise<F1ApiResponse<CircuitsResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/circuits/${circuitId}.json`);
     return response.json();
   },
 
   getDriverStandings: async (
     season: string,
-  ): Promise<{
-    MRData: {
-      StandingsTable: {
-        season: string;
-        round: string;
-        StandingsLists: Array<{
-          season: string;
-          round: string;
-          DriverStandings: Array<DriverStanding>;
-        }>;
-      };
-    };
-  }> => {
+  ): Promise<F1ApiResponse<DriverStandingsResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/${season}/driverstandings.json`);
     return response.json();
   },
 
   getConstructorStandings: async (
     season: string,
-  ): Promise<{
-    MRData: {
-      StandingsTable: {
-        season: string;
-        round: string;
-        StandingsLists: Array<{
-          season: string;
-          round: string;
-          ConstructorStandings: Array<ConstructorStanding>;
-        }>;
-      };
-    };
-  }> => {
+  ): Promise<F1ApiResponse<ConstructorStandingsResponseMRData>> => {
     const response = await fetch(
       `${BASE_URL}/${season}/constructorstandings.json`,
     );
@@ -134,7 +105,7 @@ export const f1Api = {
 
   getDriver: async (
     driverId: string,
-  ): Promise<{ MRData: { DriverTable: { Drivers: Array<Driver> } } }> => {
+  ): Promise<F1ApiResponse<DriversResponseMRData>> => {
     const response = await fetch(`${BASE_URL}/drivers/${driverId}.json`);
     return response.json();
   },
@@ -142,7 +113,7 @@ export const f1Api = {
   getDriverResults: async (
     driverId: string,
     season: string,
-  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+  ): Promise<F1ApiResponse<RacesResponseMRData>> => {
     const response = await fetch(
       `${BASE_URL}/${season}/drivers/${driverId}/results.json`,
     );
@@ -151,9 +122,7 @@ export const f1Api = {
 
   getConstructor: async (
     constructorId: string,
-  ): Promise<{
-    MRData: { ConstructorTable: { Constructors: Array<Constructor> } };
-  }> => {
+  ): Promise<F1ApiResponse<ConstructorsResponseMRData>> => {
     const response = await fetch(
       `${BASE_URL}/constructors/${constructorId}.json`,
     );
@@ -163,7 +132,7 @@ export const f1Api = {
   getConstructorResults: async (
     constructorId: string,
     season: string,
-  ): Promise<{ MRData: { RaceTable: { Races: Array<Race> } } }> => {
+  ): Promise<F1ApiResponse<RacesResponseMRData>> => {
     const response = await fetch(
       `${BASE_URL}/${season}/constructors/${constructorId}/results.json`,
     );
@@ -173,7 +142,7 @@ export const f1Api = {
   getConstructorDrivers: async (
     constructorId: string,
     season: string,
-  ): Promise<{ MRData: { DriverTable: { Drivers: Array<Driver> } } }> => {
+  ): Promise<F1ApiResponse<DriversResponseMRData>> => {
     const response = await fetch(
       `${BASE_URL}/${season}/constructors/${constructorId}/drivers.json`,
     );
