@@ -4,6 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
 import { Results } from './Results';
+import type { F1ApiResponse, RacesResponseMRData } from '../types/f1';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -83,21 +84,25 @@ describe('Results', () => {
 
   test('displays race cards when data is loaded', async () => {
     // Mock the API response for basic race information
-    const mockRaces = {
+    const mockRaces: F1ApiResponse<RacesResponseMRData> = {
       MRData: {
+        xmlns: 'http://ergast.com/mrd/1.5',
+        series: 'f1',
+        url: 'http://ergast.com/api/f1/2024/results',
+        limit: '30',
+        offset: '0',
+        total: '1',
         RaceTable: {
           Races: [
             {
-              season: '2025',
+              season: '2024',
               round: '1',
+              url: 'http://en.wikipedia.org/wiki/2024_Bahrain_Grand_Prix',
               raceName: 'Bahrain Grand Prix',
-              date: '2025-03-02',
-              time: '15:00:00Z',
-              url: 'http://example.com/bahrain-gp',
               Circuit: {
                 circuitId: 'bahrain',
+                url: 'http://en.wikipedia.org/wiki/Bahrain_International_Circuit',
                 circuitName: 'Bahrain International Circuit',
-                url: 'http://example.com/bahrain',
                 Location: {
                   locality: 'Sakhir',
                   country: 'Bahrain',
@@ -105,6 +110,8 @@ describe('Results', () => {
                   long: '50.5106',
                 },
               },
+              date: '2024-03-02',
+              time: '15:00:00Z',
             },
           ],
         },

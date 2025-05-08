@@ -22,12 +22,10 @@ vi.mock('./CountryFlag', () => ({
 vi.mock('@tanstack/react-router', () => ({
   Link: ({
     to,
-    params,
     children,
     className,
   }: {
     to: string;
-    params?: Record<string, string>;
     children: React.ReactNode;
     className?: string;
   }) => (
@@ -42,24 +40,24 @@ describe('StandingsTable', () => {
     {
       position: '1',
       positionText: '1',
-      points: '575',
-      wins: '19',
+      points: '25',
+      wins: '1',
       Driver: {
-        driverId: 'max_verstappen',
-        permanentNumber: '1',
-        code: 'VER',
-        url: 'http://example.com/verstappen',
-        givenName: 'Max',
-        familyName: 'Verstappen',
-        dateOfBirth: '1997-09-30',
-        nationality: 'Dutch',
+        driverId: 'hamilton',
+        permanentNumber: '44',
+        code: 'HAM',
+        url: 'http://example.com/hamilton',
+        givenName: 'Lewis',
+        familyName: 'Hamilton',
+        dateOfBirth: '1985-01-07',
+        nationality: 'British',
       },
       Constructors: [
         {
-          constructorId: 'red_bull',
-          url: 'http://example.com/red-bull',
-          name: 'Red Bull Racing',
-          nationality: 'Austrian',
+          constructorId: 'mercedes',
+          url: 'http://example.com/mercedes',
+          name: 'Mercedes',
+          nationality: 'German',
         },
       ],
     },
@@ -132,20 +130,24 @@ describe('StandingsTable', () => {
     expect(screen.getByText('Wins')).toBeDefined();
 
     // Check first driver row
-    const firstRow = screen.getByRole('row', { name: /Max Verstappen/i });
+    const firstRow = screen.getByRole('row', {
+      name: /Lewis Hamilton.*25.*1/i,
+    });
     expect(firstRow).toBeDefined();
     expect(firstRow).toHaveTextContent('1');
-    expect(firstRow).toHaveTextContent('575');
-    expect(firstRow).toHaveTextContent('19');
-    expect(screen.getByTestId('flag-Dutch')).toBeDefined();
+    expect(firstRow).toHaveTextContent('25');
+    expect(firstRow).toHaveTextContent('1');
+    const flags = screen.getAllByTestId('flag-British');
+    expect(flags).toHaveLength(2);
 
     // Check second driver row
-    const secondRow = screen.getByRole('row', { name: /Lewis Hamilton/i });
+    const secondRow = screen.getByRole('row', {
+      name: /Lewis Hamilton.*285.*2/i,
+    });
     expect(secondRow).toBeDefined();
     expect(secondRow).toHaveTextContent('2');
     expect(secondRow).toHaveTextContent('285');
     expect(secondRow).toHaveTextContent('2');
-    expect(screen.getByTestId('flag-British')).toBeDefined();
   });
 
   test('renders constructor standings correctly', () => {
@@ -196,15 +198,12 @@ describe('StandingsTable', () => {
       />,
     );
 
-    const verstappenLink = screen.getByRole('link', {
-      name: /Max Verstappen/i,
+    const links = screen.getAllByRole('link', {
+      name: /Lewis Hamilton/i,
     });
-    expect(verstappenLink).toBeDefined();
-    expect(verstappenLink).toHaveAttribute('href', '/drivers/$driverId');
-
-    const hamiltonLink = screen.getByRole('link', { name: /Lewis Hamilton/i });
-    expect(hamiltonLink).toBeDefined();
-    expect(hamiltonLink).toHaveAttribute('href', '/drivers/$driverId');
+    expect(links).toHaveLength(2);
+    expect(links[0]).toHaveAttribute('href', '/drivers/$driverId');
+    expect(links[1]).toHaveAttribute('href', '/drivers/$driverId');
   });
 
   test('renders constructor links correctly', () => {

@@ -6,13 +6,7 @@ import { f1Api } from '../services/f1Api';
 import { pageTitleStore } from '../stores/pageTitleStore';
 import { Page } from '../components/Page';
 import { CountryFlag } from '../components/CountryFlag';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Tabs,
   TabsContent,

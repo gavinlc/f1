@@ -4,6 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
 import { Circuits } from './Circuits';
+import type { CircuitsResponseMRData, F1ApiResponse } from '../types/f1';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -52,6 +53,46 @@ const renderWithProviders = (ui: React.ReactElement) => {
   );
 };
 
+const mockCircuits: F1ApiResponse<CircuitsResponseMRData> = {
+  MRData: {
+    xmlns: 'http://ergast.com/mrd/1.5',
+    series: 'f1',
+    url: 'http://ergast.com/api/f1/2024/circuits',
+    limit: '30',
+    offset: '0',
+    total: '1',
+    CircuitTable: {
+      Circuits: [
+        {
+          circuitId: 'monaco',
+          circuitName: 'Circuit de Monaco',
+          url: 'http://en.wikipedia.org/wiki/Circuit_de_Monaco',
+          Location: {
+            locality: 'Monte-Carlo',
+            country: 'Monaco',
+            lat: '43.7347',
+            long: '7.42056',
+          },
+        },
+      ],
+    },
+  },
+};
+
+const mockEmptyCircuits: F1ApiResponse<CircuitsResponseMRData> = {
+  MRData: {
+    xmlns: 'http://ergast.com/mrd/1.5',
+    series: 'f1',
+    url: 'http://ergast.com/api/f1/2024/circuits',
+    limit: '30',
+    offset: '0',
+    total: '0',
+    CircuitTable: {
+      Circuits: [],
+    },
+  },
+};
+
 describe('Circuits', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -70,26 +111,6 @@ describe('Circuits', () => {
 
   test('renders circuit list when data is loaded', async () => {
     // Mock the API response
-    const mockCircuits = {
-      MRData: {
-        CircuitTable: {
-          Circuits: [
-            {
-              circuitId: 'bahrain',
-              circuitName: 'Bahrain International Circuit',
-              url: 'http://example.com/bahrain',
-              Location: {
-                locality: 'Sakhir',
-                country: 'Bahrain',
-                lat: '26.0325',
-                long: '50.5106',
-              },
-            },
-          ],
-        },
-      },
-    };
-
     vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValueOnce(mockCircuits);
 
     renderWithProviders(<Circuits />);
@@ -100,21 +121,15 @@ describe('Circuits', () => {
     });
 
     // Check if the circuit details are rendered
-    expect(screen.getByText('Bahrain International Circuit')).toBeDefined();
-    expect(screen.getByText('Sakhir, Bahrain')).toBeDefined();
+    expect(screen.getByText('Circuit de Monaco')).toBeDefined();
+    expect(screen.getByText('Monte-Carlo, Monaco')).toBeDefined();
   });
 
   test('handles empty circuit list', async () => {
     // Mock empty API response
-    const mockCircuits = {
-      MRData: {
-        CircuitTable: {
-          Circuits: [],
-        },
-      },
-    };
-
-    vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValueOnce(mockCircuits);
+    vi.mocked(f1Api.getCircuitsForSeason).mockResolvedValueOnce(
+      mockEmptyCircuits,
+    );
 
     renderWithProviders(<Circuits />);
 
@@ -124,6 +139,6 @@ describe('Circuits', () => {
     });
 
     // Verify no circuits are rendered
-    expect(screen.queryByText(/Bahrain/)).toBeNull();
+    expect(screen.queryByText(/Circuit de Monaco/)).toBeNull();
   });
 });

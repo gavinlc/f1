@@ -1,15 +1,10 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
 import { Drivers } from './Drivers';
+import type { DriversResponseMRData, F1ApiResponse } from '../types/f1';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -63,6 +58,45 @@ const renderWithProviders = (ui: React.ReactElement) => {
   );
 };
 
+const mockDrivers: F1ApiResponse<DriversResponseMRData> = {
+  MRData: {
+    xmlns: 'http://ergast.com/mrd/1.5',
+    series: 'f1',
+    url: 'http://ergast.com/api/f1/2024/drivers',
+    limit: '30',
+    offset: '0',
+    total: '1',
+    DriverTable: {
+      Drivers: [
+        {
+          driverId: 'hamilton',
+          permanentNumber: '44',
+          code: 'HAM',
+          url: 'http://en.wikipedia.org/wiki/Lewis_Hamilton',
+          givenName: 'Lewis',
+          familyName: 'Hamilton',
+          dateOfBirth: '1985-01-07',
+          nationality: 'British',
+        },
+      ],
+    },
+  },
+};
+
+const mockEmptyDrivers: F1ApiResponse<DriversResponseMRData> = {
+  MRData: {
+    xmlns: 'http://ergast.com/mrd/1.5',
+    series: 'f1',
+    url: 'http://ergast.com/api/f1/2024/drivers',
+    limit: '30',
+    offset: '0',
+    total: '0',
+    DriverTable: {
+      Drivers: [],
+    },
+  },
+};
+
 describe('Drivers', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -79,25 +113,6 @@ describe('Drivers', () => {
 
   test('renders driver list when data is loaded', async () => {
     // Mock the API response
-    const mockDrivers = {
-      MRData: {
-        DriverTable: {
-          Drivers: [
-            {
-              driverId: 'max_verstappen',
-              permanentNumber: '1',
-              code: 'VER',
-              url: 'http://example.com/verstappen',
-              givenName: 'Max',
-              familyName: 'Verstappen',
-              dateOfBirth: '1997-09-30',
-              nationality: 'Dutch',
-            },
-          ],
-        },
-      },
-    };
-
     vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers);
 
     renderWithProviders(<Drivers />);
@@ -108,23 +123,15 @@ describe('Drivers', () => {
     });
 
     // Check if the driver details are rendered
-    expect(screen.getByText('Max Verstappen (VER)')).toBeDefined();
-    expect(screen.getByText(/Dutch/)).toBeDefined();
+    expect(screen.getByText('Lewis Hamilton (HAM)')).toBeDefined();
+    expect(screen.getByText(/British/)).toBeDefined();
     expect(screen.getByText(/26/)).toBeDefined(); // Age from mocked useAge hook
-    expect(screen.getByText(/VER/)).toBeDefined();
+    expect(screen.getByText(/HAM/)).toBeDefined();
   });
 
   test('handles empty driver list', async () => {
     // Mock empty API response
-    const mockDrivers = {
-      MRData: {
-        DriverTable: {
-          Drivers: [],
-        },
-      },
-    };
-
-    vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockDrivers);
+    vi.mocked(f1Api.getDrivers).mockResolvedValueOnce(mockEmptyDrivers);
 
     renderWithProviders(<Drivers />);
 
@@ -134,6 +141,6 @@ describe('Drivers', () => {
     });
 
     // Verify no drivers are rendered
-    expect(screen.queryByText(/Verstappen/)).toBeNull();
+    expect(screen.queryByText(/Hamilton/)).toBeNull();
   });
 });

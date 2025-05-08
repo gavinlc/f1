@@ -4,6 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { f1Api } from '../services/f1Api';
 import { createTestQueryClient } from '../test/setup';
 import { CircuitDetails } from './CircuitDetails';
+import type { CircuitsResponseMRData, F1ApiResponse } from '../types/f1';
 
 // Mock the f1Api
 vi.mock('../services/f1Api', () => ({
@@ -74,19 +75,25 @@ describe('CircuitDetails', () => {
 
   test('renders circuit details when data is loaded', async () => {
     // Mock the circuit details
-    const mockCircuit = {
+    const mockCircuit: F1ApiResponse<CircuitsResponseMRData> = {
       MRData: {
+        xmlns: 'http://ergast.com/mrd/1.5',
+        series: 'f1',
+        url: 'http://ergast.com/api/f1/2024/circuits/monaco',
+        limit: '30',
+        offset: '0',
+        total: '1',
         CircuitTable: {
           Circuits: [
             {
-              circuitId: 'bahrain',
-              circuitName: 'Bahrain International Circuit',
-              url: 'http://example.com/bahrain',
+              circuitId: 'monaco',
+              circuitName: 'Circuit de Monaco',
+              url: 'http://en.wikipedia.org/wiki/Circuit_de_Monaco',
               Location: {
-                locality: 'Sakhir',
-                country: 'Bahrain',
-                lat: '26.0325',
-                long: '50.5106',
+                locality: 'Monte-Carlo',
+                country: 'Monaco',
+                lat: '43.7347',
+                long: '7.42056',
               },
             },
           ],
@@ -105,7 +112,7 @@ describe('CircuitDetails', () => {
 
     // Check if the circuit details are rendered
     expect(screen.getByText('Circuit Information')).toBeDefined();
-    expect(screen.getByText('Sakhir, Bahrain')).toBeDefined();
+    expect(screen.getByText('Monte-Carlo, Monaco')).toBeDefined();
     expect(screen.getByTestId('mock-circuit-map')).toBeDefined();
     expect(
       screen.getByRole('link', { name: 'Back to Circuits' }),
@@ -114,15 +121,21 @@ describe('CircuitDetails', () => {
 
   test('handles circuit not found', async () => {
     // Mock empty API response
-    const mockCircuit = {
+    const mockEmptyCircuit: F1ApiResponse<CircuitsResponseMRData> = {
       MRData: {
+        xmlns: 'http://ergast.com/mrd/1.5',
+        series: 'f1',
+        url: 'http://ergast.com/api/f1/2024/circuits/monaco',
+        limit: '30',
+        offset: '0',
+        total: '0',
         CircuitTable: {
           Circuits: [],
         },
       },
     };
 
-    vi.mocked(f1Api.getCircuit).mockResolvedValueOnce(mockCircuit);
+    vi.mocked(f1Api.getCircuit).mockResolvedValueOnce(mockEmptyCircuit);
 
     renderWithProviders(<CircuitDetails />);
 

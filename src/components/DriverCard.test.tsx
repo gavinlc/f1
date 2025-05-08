@@ -1,7 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import { DriverCard } from './DriverCard';
-import type { Driver } from '../types/f1';
 
 // Mock the CountryFlag component
 vi.mock('./CountryFlag', () => ({
