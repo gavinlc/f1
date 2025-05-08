@@ -10,6 +10,7 @@ provider:
 
 plugins:
   - serverless-s3-sync
+  - serverless-cloudfront-invalidate
 
 custom:
   cloudfront:
@@ -20,6 +21,11 @@ custom:
       localDir: dist
       deleteRemoved: true
       followSymlinks: true
+  cloudfrontInvalidate:
+    - distributionId: E3AYKH9Y9578GO
+      autoInvalidate: true
+      items:
+        - /*
 
 resources:
   - Resources:

@@ -9,7 +9,8 @@
     "test": "vitest run",
     "lint": "eslint",
     "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check": "prettier --write . && eslint --fix",
+    "deploy": "yarn build && serverless deploy --stage production"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.7",
@@ -53,6 +54,7 @@
     "eslint": "^9.24.0",
     "jsdom": "^26.0.0",
     "prettier": "^3.5.3",
+    "serverless-cloudfront-invalidate": "^1.12.2",
     "serverless-s3-sync": "^3.4.0",
     "typescript": "^5.7.2",
     "vite": "^6.1.0",

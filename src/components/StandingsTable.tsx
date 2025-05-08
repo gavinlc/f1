@@ -39,63 +39,81 @@ export function StandingsTable({
             <TableRow>
               <TableHead>Position</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Points</TableHead>
               <TableHead>Wins</TableHead>
+              <TableHead>Points</TableHead>
+              <TableHead>Gap</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {standings.map((standing) => (
-              <TableRow
-                key={
-                  type === 'driver'
-                    ? (standing as DriverStanding).Driver.driverId
-                    : (standing as ConstructorStanding).Constructor
-                        .constructorId
-                }
-              >
-                <TableCell>{standing.position}</TableCell>
-                <TableCell>
-                  {type === 'driver' ? (
-                    <Link
-                      to="/drivers/$driverId"
-                      params={{
-                        driverId: (standing as DriverStanding).Driver.driverId,
-                      }}
-                      className="flex items-center gap-2 hover:underline"
-                    >
-                      <CountryFlag
-                        nationality={
-                          (standing as DriverStanding).Driver.nationality
-                        }
-                        className="w-6 h-4"
-                      />
-                      {(standing as DriverStanding).Driver.givenName}{' '}
-                      {(standing as DriverStanding).Driver.familyName}
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/constructors/$constructorId"
-                      params={{
-                        constructorId: (standing as ConstructorStanding)
-                          .Constructor.constructorId,
-                      }}
-                      className="flex items-center gap-2 hover:underline"
-                    >
-                      <CountryFlag
-                        nationality={
-                          (standing as ConstructorStanding).Constructor
-                            .nationality
-                        }
-                        className="w-6 h-4"
-                      />
-                      {(standing as ConstructorStanding).Constructor.name}
-                    </Link>
-                  )}
-                </TableCell>
-                <TableCell>{standing.points}</TableCell>
-                <TableCell>{standing.wins}</TableCell>
-              </TableRow>
-            ))}
+            {standings.map((standing, index) => {
+              const currentPoints = parseFloat(standing.points);
+              const previousPoints =
+                index > 0
+                  ? parseFloat(standings[index - 1].points)
+                  : currentPoints;
+              const pointsDifference = currentPoints - previousPoints;
+              const formattedDifference =
+                index === 0
+                  ? '-'
+                  : pointsDifference > 0
+                    ? `+${pointsDifference}`
+                    : pointsDifference.toString();
+
+              return (
+                <TableRow
+                  key={
+                    type === 'driver'
+                      ? (standing as DriverStanding).Driver.driverId
+                      : (standing as ConstructorStanding).Constructor
+                          .constructorId
+                  }
+                >
+                  <TableCell>{standing.position}</TableCell>
+                  <TableCell>
+                    {type === 'driver' ? (
+                      <Link
+                        to="/drivers/$driverId"
+                        params={{
+                          driverId: (standing as DriverStanding).Driver
+                            .driverId,
+                        }}
+                        className="flex items-center gap-2 hover:underline"
+                      >
+                        <CountryFlag
+                          nationality={
+                            (standing as DriverStanding).Driver.nationality
+                          }
+                          className="w-6 h-4"
+                        />
+                        {(standing as DriverStanding).Driver.givenName}{' '}
+                        {(standing as DriverStanding).Driver.familyName}
+                      </Link>
+                    ) : (
+                      <Link
+                        to="/constructors/$constructorId"
+                        params={{
+                          constructorId: (standing as ConstructorStanding)
+                            .Constructor.constructorId,
+                        }}
+                        className="flex items-center gap-2 hover:underline"
+                      >
+                        <CountryFlag
+                          nationality={
+                            (standing as ConstructorStanding).Constructor
+                              .nationality
+                          }
+                          className="w-6 h-4"
+                        />
+                        {(standing as ConstructorStanding).Constructor.name}
+                      </Link>
+                    )}
+                  </TableCell>
+                  <TableCell>{standing.wins}</TableCell>
+                  <TableCell>{standing.points}</TableCell>
+                  <TableCell>{formattedDifference}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
