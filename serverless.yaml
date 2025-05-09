@@ -105,6 +105,11 @@ resources:
               AcmCertificateArn: ${self:custom.cloudfront.certArn}
               SslSupportMethod: sni-only
               MinimumProtocolVersion: TLSv1.2_2021
+            CustomErrorResponses:
+              - ErrorCode: 403
+                ResponseCode: 200
+                ResponsePagePath: /index.html
+                ErrorCachingMinTTL: 0
 
       DnsRecord:
         Type: AWS::Route53::RecordSet

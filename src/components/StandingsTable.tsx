@@ -16,6 +16,21 @@ interface StandingsTableProps {
   type: 'driver' | 'constructor';
 }
 
+function calculatePointsDifference(
+  currentPoints: number,
+  nextPoints: number,
+  isLastPosition: boolean,
+): string {
+  if (isLastPosition) {
+    return '-';
+  }
+
+  const pointsDifference = currentPoints - nextPoints;
+  return pointsDifference > 0
+    ? `+${pointsDifference}`
+    : pointsDifference.toString();
+}
+
 export function StandingsTable({
   title,
   standings,
@@ -47,17 +62,15 @@ export function StandingsTable({
           <TableBody>
             {standings.map((standing, index) => {
               const currentPoints = parseFloat(standing.points);
-              const previousPoints =
-                index > 0
-                  ? parseFloat(standings[index - 1].points)
+              const nextPoints =
+                index < standings.length - 1
+                  ? parseFloat(standings[index + 1].points)
                   : currentPoints;
-              const pointsDifference = currentPoints - previousPoints;
-              const formattedDifference =
-                index === 0
-                  ? '-'
-                  : pointsDifference > 0
-                    ? `+${pointsDifference}`
-                    : pointsDifference.toString();
+              const formattedDifference = calculatePointsDifference(
+                currentPoints,
+                nextPoints,
+                index === standings.length - 1,
+              );
 
               return (
                 <TableRow

@@ -131,7 +131,7 @@ describe('StandingsTable', () => {
 
     // Check first driver row
     const firstRow = screen.getByRole('row', {
-      name: /Lewis Hamilton.*25.*1/i,
+      name: /1 Flag: British Lewis Hamilton 1 25 -260/i,
     });
     expect(firstRow).toBeDefined();
     expect(firstRow).toHaveTextContent('1');
@@ -142,7 +142,7 @@ describe('StandingsTable', () => {
 
     // Check second driver row
     const secondRow = screen.getByRole('row', {
-      name: /Lewis Hamilton.*285.*2/i,
+      name: /2 Flag: British Lewis Hamilton 2 285 -/i,
     });
     expect(secondRow).toBeDefined();
     expect(secondRow).toHaveTextContent('2');

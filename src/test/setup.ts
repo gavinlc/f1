@@ -23,6 +23,31 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// Mock DOM APIs needed for Radix UI components
+if (typeof window !== 'undefined') {
+  // Pointer capture mocks
+  window.Element.prototype.hasPointerCapture = vi.fn();
+  window.Element.prototype.setPointerCapture = vi.fn();
+  window.Element.prototype.releasePointerCapture = vi.fn();
+
+  // ScrollIntoView mock
+  window.Element.prototype.scrollIntoView = vi.fn();
+
+  // ResizeObserver mock
+  window.ResizeObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  }));
+
+  // IntersectionObserver mock
+  window.IntersectionObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  }));
+}
+
 // Create a new QueryClient for each test
 const createTestQueryClient = () =>
   new QueryClient({
